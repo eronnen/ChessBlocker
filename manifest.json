@@ -1,6 +1,28 @@
 {
-    "name": "Chess Blocker",
-    "description": "Blocking chess sites to increase productivity",
+    "manifest_version": 3,
+    "name": "ChessBlocker",
     "version": "0.1",
-    "manifest_version": 3
+    
+    "author": "Ely Ronnen",
+    "description": "Blocking chess sites to increase productivity",
+    "icons": {
+        "16": "images/ChessBlocker16.png",
+        "32": "images/ChessBlocker32.png",
+        "48": "images/ChessBlocker48.png",
+        "128": "images/ChessBlocker128.png"
+    },
+
+    "content_scripts": [
+        {
+            "all_frames": true,
+            "js": ["chesscom.js"],
+            "matches": [
+                "https://*.chess.com/home",
+                "https://*.chess.com/play/online",
+                "https://*.chess.com/live",
+                "https://*.chess.com/game/live/*"
+            ],
+            "run_at": "document_idle"
+        }
+    ]
 }
