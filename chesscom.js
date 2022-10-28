@@ -52,7 +52,6 @@ function playButtonHandler(event) {
     }
 
     console.debug('ChessBlocker: Clicked on play');
-    console.log(event);
     const target = event.target;
     event.preventDefault();
     event.stopPropagation();
@@ -95,6 +94,14 @@ function playButtonHandler(event) {
         if (numberOfGamesPlayed >= items.options_chesscom_gamesPerDay) {
             // limit reached
             console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${items.options_chesscom_gamesPerDay} games`);
+            chrome.storage.sync.set({
+                chesscom_games_played_today: numberOfGamesPlayed
+            }).then(() => {
+                chrome.runtime.sendMessage(chrome.runtime.id, {
+                    type: 'limit',
+                    numberOfGamesPlayed: numberOfGamesPlayed
+                });
+            });
         }
         else {
             console.debug(`you played ${numberOfGamesPlayed}/${items.options_chesscom_gamesPerDay} games today`);
@@ -149,17 +156,23 @@ async function waitForSideBarAndAddListener() {
             return;
         }
 
-        if (event.target.tagName != 'BUTTON' && event.target.tagName != 'A') {
-            return;
+        let closestButton = event.target.closest('button');
+        if (closestButton == null) {
+            closestButton = event.target.closest('a');
+            if (closestButton == null) {
+                // not a button or a link
+                return;
+            }
         }
 
-        if (event.target.textContent.match(/^\s*New (\d+) min\s*$/)) {
+        const buttonText = closestButton.textContent;
+        if (buttonText.match(/^\s*New (\d+) min\s*$/)) {
             playButtonHandler(event);
         }
-        else if (event.target.textContent.match(/^\s*Play\s*$/)) {
+        else if (buttonText.match(/^\s*Play\s*$/)) {
             playButtonHandler(event);
         }
-        else if (event.target.textContent.match(/^\s*New (\d+) min rated\s*$/)) {
+        else if (buttonText.match(/^\s*New (\d+) min rated\s*$/)) {
             playButtonHandler(event);
         }
     }, true);
