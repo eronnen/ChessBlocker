@@ -48,7 +48,6 @@ function reinitializeChessBlockerData(delayMs = 0) {
 
 function playButtonHandler(event) {
     if (event.created_by_chess_blocker) {
-        console.debug('got event created_by_chess_blocker');
         return;
     }
 
@@ -110,6 +109,7 @@ function playButtonHandler(event) {
 function addPlayButtonHandlerWithPattern(parent, tag, buttonPattern) {
     for (const e of parent.querySelectorAll(tag)) {
         if (e instanceof Element && e.textContent.match(buttonPattern)) {
+            console.debug(`ChessBlocker: hooking ${e.textContent} button`);
             e.addEventListener('click', playButtonHandler, true);
             return true;
         }
@@ -138,6 +138,35 @@ function waitForElementToExist(id, selector = null) {
     });
 }
 
+async function waitForSideBarAndAddListener() {
+    const sideBarElement = await waitForElementToExist("board-layout-sidebar");
+    if (!sideBarElement) {
+        throw new Error('Didnt find sidebar on live game');
+    }
+
+    sideBarElement.addEventListener('click', (event) => {
+        if (!(event.target instanceof Element)) {
+            return;
+        }
+
+        if (event.target.tagName != 'BUTTON' && event.target.tagName != 'A') {
+            return;
+        }
+
+        if (event.target.textContent.match(/^\s*New (\d+) min\s*$/)) {
+            playButtonHandler(event);
+        }
+        else if (event.target.textContent.match(/^\s*Play\s*$/)) {
+            playButtonHandler(event);
+        }
+        else if (event.target.textContent.match(/^\s*New (\d+) min rated\s*$/)) {
+            playButtonHandler(event);
+        }
+    }, true);
+
+    return sideBarElement;
+}
+
 async function initializeChessBlocker() {
     const pagePath = document.location.pathname;
     if (pagePath == '/home') {
@@ -151,27 +180,7 @@ async function initializeChessBlocker() {
     else if (pagePath.startsWith('/game/live') || pagePath.startsWith('/play/online')) {
         // game link - "new x min" button appears when game ends, and there is a play button in the "New Game" tab
         reinitializeChessBlockerData();
-        const sideBarElement = await waitForElementToExist("board-layout-sidebar");
-        if (!sideBarElement) {
-            throw new Error('Didnt find sidebar on live game');
-        }
-
-        sideBarElement.addEventListener('click', (event) => {
-            if (!(event.target instanceof Element)) {
-                return;
-            }
-
-            if (!event.target.tagName == 'BUTTON') {
-                return;
-            }
-
-            if (event.target.textContent.match(/^\s*New (\d+) min\s*$/)) {
-                playButtonHandler(event);
-            }
-            else if (event.target.textContent.match(/^\s*Play\s*$/)) {
-                playButtonHandler(event);
-            }
-        }, true);
+        const sideBarElement = await waitForSideBarAndAddListener();
 
         const sidebarObserver = new MutationObserver((mutationList, observer) => {
             for (const mutation of mutationList) {
@@ -196,6 +205,35 @@ async function initializeChessBlocker() {
             }
         });
         sidebarObserver.observe(sideBarElement, {childList: true, subtree: true});
+    }
+    else if (pagePath.startsWith('/live')) {
+        // old live link - "Play" button on sidebar and "New x min" link in the chat on button
+        console.debug('live');
+        reinitializeChessBlockerData();
+        const sideBarElement = await waitForSideBarAndAddListener();
+        const boardLayoutElement = document.getElementById('board-layout-chessboard');
+        const gameDialogObserver = new MutationObserver((mutationList, observer) => {
+            for (const mutation of mutationList) {
+                if (mutation.type != "childList") {
+                    continue;
+                }
+
+                for (const addedNode of mutation.addedNodes) {
+                    if (addedNode instanceof Element && addedNode.className.includes('board-dialog-component')) {
+                        // game was in play, now finished
+                        console.debug('ChessBlocker: chess.com game is finished');
+
+                        // wait for chess.com to update last game data hopefully. TODO: remove delay?
+                        reinitializeChessBlockerData(1500);
+                        if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/)) {
+                            console.error("Didn't find play button in home page");
+                        }
+                    }
+                }
+            }
+        });
+        console.debug('gameDialogObserver');
+        gameDialogObserver.observe(boardLayoutElement, {childList: true, subtree: true});
     }
 }
 
