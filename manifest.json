@@ -18,11 +18,11 @@
             "js": ["chesscom.js"],
             "matches": [
                 "https://*.chess.com/home",
-                "https://*.chess.com/play/online",
-                "https://*.chess.com/live",
-                "https://*.chess.com/game/live/*"
+                "https://*.chess.com/play/online/*",
+                "https://*.chess.com/game/live/*",
+                "https://*.chess.com/live"
             ],
-            "run_at": "document_idle"
+            "run_at": "document_end"
         }
     ],
 

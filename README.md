@@ -4,7 +4,7 @@ ChessBlocker is a chrome extension with the purpose of restricting time spent on
 
 #
 
-## Settings
+## How it works
 * **Username** - chess.com username (used to check playing time and number of games).
 * **Minutes Per Day** - maximum number of minutes of playing time allowed per day.
 * **Games Per Day** - maximum number of games allowed to play each day. 
@@ -14,11 +14,17 @@ ChessBlocker is a chrome extension with the purpose of restricting time spent on
 - [x] chess.com
 - [ ] lichess
 
+## Known Issues
+### Chess.com
+* Chess.com API supports only getting a user's games from the whole last month. This data can take a few seconds to retrieve, which can delay the button click.
+* The games data for a user can take a few seconds to update in Chess.com server, so sometimes when starting a new game, the previous game won't be counted if ended very recently.
+
 ## TODO
 - [ ] Block direct links like `https://www.chess.com/play/online/new?action=createLiveChallenge&base=180&timeIncrement=0`
+- [ ] Add browser based counting
+- [ ] Add loading animation when it takes a lot of times to retrieve games
 - [ ] Restriction based on day of the week
 - [ ] Prettier settings UI
-- [ ] Use faster undocumented API to retrieve 20 or less last games with `https://www.chess.com/callback/user/popup/{username}` and `"https://www.chess.com/callback/user/games?locale=en&all=0&userId={userId}&gameType=chess&gameTimeClass=blitz"`
 - [ ] Request from chess.com API to get games per day instead of per month
 - [ ] Restriction based on game time format (blitz, bullet...)
 
