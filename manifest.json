@@ -49,5 +49,8 @@
         "https://*.chess.com/play/online/new?action=createLiveChallenge*"
     ],
 
-    "options_page": "options.html"
+    "options_page": "options.html",
+    "action": {
+        "default_popup": "popup.html"
+    }
 }
