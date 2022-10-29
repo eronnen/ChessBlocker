@@ -2,7 +2,7 @@
 
 ChessBlocker is a chrome extension with the purpose of restricting time spent on chess without completely stop playing.
 
-<img src="./images/ChessBlocker128.png">
+<img src="./images/ChessBlocker256.png">
 
 ## How it works
 ### Chess.com
@@ -22,12 +22,12 @@ In the Chess.com website, the extension adds a callback to every button that sta
 - [ ] Request from chess.com API to get games per day instead of per month
 - [ ] Use dialog inside tab instead of opening a new tab when game limit is reached (when chrome API allows)
 - [ ] Add loading animation when it takes a lot of times to retrieve games (when `chrome.action.openPopup` will work in chrome... or find a different way)
-- [ ] Add browser based counting
-- [ ] Restriction based on day of the week
+- [ ] Add browser based counting (instead of always using chess.com API)
 - [ ] Prettier options UI
 - [ ] Prettier limit page UI
-- [ ] Restriction based on game time format (blitz, bullet...)
+- [ ] Restriction based on game type (blitz, bullet...)
+- [ ] Refactor extension to multiple js files
 
 ## Contributing
 
-`ChessBlocker` is developed at [eronnen/ChessBlocker](https://github.com/eronnen/ChessBlocker). PRs, issues and feature request are welcome.
+`ChessBlocker` is developed at [eronnen/ChessBlocker](https://github.com/eronnen/ChessBlocker). PRs, issues, feedbacks and feature request are welcome, you can use the [issue tracker](https://github.com/eronnen/ChessBlocker/issues)

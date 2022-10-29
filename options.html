@@ -31,11 +31,17 @@
             text-align: left;
         }
 
-        input,
-        textarea {
-            font: 1em sans-serif;
+        select {
             width: 300px;
             box-sizing: border-box;
+            font: 1em sans-serif;
+            border: 1px solid #999;
+        }
+
+        input {
+            width: 300px;
+            box-sizing: border-box;
+            font: 1em sans-serif;
             border: 1px solid #999;
         }
 
@@ -63,19 +69,54 @@
     <h2 style="text-align: left;">General</h2>
     <ul>
         <li>
-            <label for="dayStartTime">Day start time:&nbsp;&nbsp;</label>
+            <label for="dayStartTime">Day start time:</label>
             <input type="time" id="dayStartTime" />
         </li>
     </ul>
     <h2 style="text-align: left;">Chess.com</h2>
     <ul>
         <li>
-            <label for="chesscom.username">Username:&nbsp;&nbsp;</label>
+            <label for="chesscom.username">Username:</label>
             <input type="text" id="chesscom.username" />
         </li>
         <li>
-            <label for="chesscom.gamesPerDay">Games per day:&nbsp;&nbsp;</label>
+            <label for="chesscom.limitByWeekDay">Limit by:</label>
+            <select id="chesscom.limitByWeekDay">
+                <option value="day">Day</option>
+                <option value="dayOfWeek">Day of week</option>
+            </select>
+        </li>
+        <li id="li.chesscom.gamesPerDay">
+            <label for="chesscom.gamesPerDay">Games per day:</label>
             <input type="number" id="chesscom.gamesPerDay" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDayMonday" hidden>
+            <label for="chesscom.gamesPerDayMonday">Games per Monday:</label>
+            <input type="number" id="chesscom.gamesPerDayMonday" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDayTuesday" hidden>
+            <label for="chesscom.gamesPerDayTuesday">Games per Tuesday:</label>
+            <input type="number" id="chesscom.gamesPerDayTuesday" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDayWednesday" hidden>
+            <label for="chesscom.gamesPerDayWednesday">Games per Wednesday:</label>
+            <input type="number" id="chesscom.gamesPerDayWednesday" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDayThursday" hidden>
+            <label for="chesscom.gamesPerDayThursday">Games per Thursday:</label>
+            <input type="number" id="chesscom.gamesPerDayThursday" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDayFriday" hidden>
+            <label for="chesscom.gamesPerDayFriday">Games per Friday:</label>
+            <input type="number" id="chesscom.gamesPerDayFriday" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDaySaturday" hidden>
+            <label for="chesscom.gamesPerDaySaturday">Games per Saturday:</label>
+            <input type="number" id="chesscom.gamesPerDaySaturday" min="1" />
+        </li>
+        <li id="li.chesscom.gamesPerDaySunday" hidden>
+            <label for="chesscom.gamesPerDaySunday">Games per Sunday:</label>
+            <input type="number" id="chesscom.gamesPerDaySunday" min="1" />
         </li>
     </ul>
     <div style="padding-top: 20px;">
