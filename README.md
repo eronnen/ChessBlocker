@@ -4,6 +4,11 @@ ChessBlocker is a chrome extension that limits the number of chess games you pla
 
 <img src="./images/ChessBlocker256.png">
 
+## Installation (Until published in chrome store)
+1. Clone/Download the project
+2. Go to [chrome://extensions/](chrome://extensions/)
+3. Click on "Load unpacked" and select the extension folder
+4. Configure your username in the options page
 ## How it works
 * The user configures his username in the extension settings, and the number of games permitted to play every day.
 * When browsing chess.com website, the extension adds a handler to every button that starts a new game. In that handler, the extension checks with chess.com API that the user didn't reach the current day limit, including games from other browsers or mobile.
