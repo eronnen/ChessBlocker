@@ -21,13 +21,13 @@ In the Chess.com website, the extension adds a callback to every button that sta
 ## TODO
 - [ ] Request from chess.com API to get games per day instead of per month
 - [ ] Use dialog inside tab instead of opening a new tab when game limit is reached (when chrome API allows)
-- [ ] Add loading animation when it takes a lot of times to retrieve games (when `chrome.action.openPopup` will work in chrome...)
-- [ ] Block direct links like `https://www.chess.com/play/online/new?action=createLiveChallenge&base=180&timeIncrement=0`
+- [ ] Add loading animation when it takes a lot of times to retrieve games (when `chrome.action.openPopup` will work in chrome... or find a different way)
 - [ ] Add browser based counting
 - [ ] Restriction based on day of the week
 - [ ] Prettier options UI
 - [ ] Prettier limit page UI
 - [ ] Restriction based on game time format (blitz, bullet...)
+- [ ] document_idle
 
 ## Contributing
 

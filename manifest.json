@@ -30,6 +30,24 @@
         "service_worker": "background.js"
     },
 
-    "permissions": ["storage", "tabs"],
+    "permissions": [
+        "storage", 
+        "tabs", 
+        "declarativeNetRequest",
+        "declarativeNetRequestWithHostAccess"
+    ],
+    "declarative_net_request": {
+        "rule_resources": [
+            {
+                "id": "liveChallenge_link",
+                "enabled": true,
+                "path": "liveChallenge_rules.json"
+            }
+        ]
+    },
+    "host_permissions": [
+        "https://*.chess.com/play/online/new?action=createLiveChallenge*"
+    ],
+
     "options_page": "options.html"
 }

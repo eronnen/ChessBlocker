@@ -46,7 +46,7 @@ function reinitializeChessBlockerData(delayMs = 0) {
     }
 }
 
-function playButtonHandler(event) {
+function playButtonHandlerInternal(event, is_liveChallenge_link) {
     if (event.created_by_chess_blocker) {
         return;
     }
@@ -105,7 +105,14 @@ function playButtonHandler(event) {
         }
         else {
             console.debug(`you played ${numberOfGamesPlayed}/${items.options_chesscom_gamesPerDay} games today`);
-            reclickButton();
+            if (is_liveChallenge_link) {
+                chrome.runtime.sendMessage(chrome.runtime.id, {
+                    type: 'allow-liveChallenge-link',
+                }).then(reclickButton);
+            }
+            else {
+                reclickButton();
+            }
         }
     }).catch((e) => {
         console.error(`ChessBlocker error: ${e.message}`);
@@ -113,11 +120,15 @@ function playButtonHandler(event) {
     });
 }
 
-function addPlayButtonHandlerWithPattern(parent, tag, buttonPattern) {
+function playButtonHandler(event) {
+    playButtonHandlerInternal(event, false);
+}
+
+function addPlayButtonHandlerWithPattern(parent, tag, buttonPattern, handler = playButtonHandler) {
     for (const e of parent.querySelectorAll(tag)) {
         if (e instanceof Element && e.textContent.match(buttonPattern)) {
             console.debug(`ChessBlocker: hooking ${e.textContent} button`);
-            e.addEventListener('click', playButtonHandler, true);
+            e.addEventListener('click', handler, true);
             return true;
         }
     }
@@ -185,13 +196,22 @@ async function initializeChessBlocker() {
     if (pagePath == '/home') {
         // home: only "Play x min" link
         reinitializeChessBlockerData();
-        await waitForElementToExist(null, '.play-quick-links-link');
-        if (!addPlayButtonHandlerWithPattern(document, "a", /^\s*Play (\d+) min\s*$/)) {
+        await waitForElementToExist(null, '.play-quick-links-title');
+        if (!addPlayButtonHandlerWithPattern(document, "a", /^\s*Play (\d+) min\s*$/, (event) => {
+            playButtonHandlerInternal(event, true);
+        })) {
             console.error("Didn't find play button in home page");
         }
     }
     else if (pagePath.startsWith('/game/live') || pagePath.startsWith('/play/online')) {
         // game link - "new x min" button appears when game ends, and there is a play button in the "New Game" tab
+        if (pagePath.startsWith('/play/online/new')) {
+            // allow only from chess.com link handler
+            chrome.runtime.sendMessage(chrome.runtime.id, {
+                type: 'disallow-liveChallenge-link',
+            })
+        }
+
         reinitializeChessBlockerData();
         const sideBarElement = await waitForSideBarAndAddListener();
 
@@ -239,7 +259,7 @@ async function initializeChessBlocker() {
                         // wait for chess.com to update last game data hopefully. TODO: remove delay?
                         reinitializeChessBlockerData(1500);
                         if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/)) {
-                            console.error("Didn't find play button in home page");
+                            console.error("Didn't find play button in game over dialog");
                         }
                     }
                 }
