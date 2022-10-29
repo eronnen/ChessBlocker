@@ -58,6 +58,43 @@
         h1 {
             font-size: 48px;
         }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted black;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 280px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            top: 150%;
+            left: 50%;
+            margin-left: -60px;
+            text-align: left;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: transparent transparent black transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
     </style>
 </head>
 
@@ -69,14 +106,32 @@
     <h2 style="text-align: left;">General</h2>
     <ul>
         <li>
-            <label for="dayStartTime">Day start time:</label>
+            <label for="dayStartTime">
+                <div class="tooltip">
+                    Day start time:
+                    <span class="tooltiptext">
+                        The starting hour of the day. <br />
+                        If specifying starting hour before 07:00 AM, then games between 00:00 AM 
+                        until that hour will count for the previous
+                        day limit (i.e Wednesday -> Tuesday)
+                    </span>
+                </div>
+            </label>
             <input type="time" id="dayStartTime" />
         </li>
     </ul>
     <h2 style="text-align: left;">Chess.com</h2>
     <ul>
         <li>
-            <label for="chesscom.username">Username:</label>
+            <label for="chesscom.username">
+                <div class="tooltip">
+                    Username:
+                    <span class="tooltiptext">
+                        Chess.com username. <br />
+                        must exist on the website.
+                    </span>
+                </div>
+            </label>
             <input type="text" id="chesscom.username" />
         </li>
         <li>

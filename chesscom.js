@@ -103,11 +103,6 @@ function playButtonHandlerInternal(event, is_liveChallenge_link) {
             // late night hours before limit - consider as previous day still
             currentDate.setDate(currentDate.getDate() - 1);
         }
-        else if ((  currentDate.getHours() > items.options_dayStartTimeHours || (currentDate.getHours() == items.options_dayStartTimeHours && currentDate.getMinutes() > options_dayStartTimeMinutes)) &&
-                    items.options_dayStartTimeHours > 20) {
-            // early night hours after limit - consider as next day
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
         const gamesPerToday = items.options_chesscom_gamesPerDay[currentDate.getDay()];
 
         //console.debug('total games played last 2 days: ' + last2DaysGamesTimes.length);

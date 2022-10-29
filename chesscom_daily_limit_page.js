@@ -31,11 +31,6 @@ function set_message() {
             // late night hours before limit - consider as previous day still
             currentDate.setDate(currentDate.getDate() - 1);
         }
-        else if ((  currentDate.getHours() > items.options_dayStartTimeHours || (currentDate.getHours() == items.options_dayStartTimeHours && currentDate.getMinutes() > options_dayStartTimeMinutes)) &&
-                    items.options_dayStartTimeHours > 20) {
-            // early night hours after limit - consider as next day
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
 
         document.getElementById('games_allowed_message').innerHTML = `${items.options_chesscom_gamesPerDay[currentDate.getDay()]} games were allowed today (${dayOfWeekAsString(currentDate.getDay())})`
     });
