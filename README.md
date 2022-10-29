@@ -1,14 +1,13 @@
 # ChessBlocker
 
-ChessBlocker is a chrome extension that can limit the number of chess games you play per day.
+ChessBlocker is a chrome extension that limits the number of chess games you play per day.
 
 <img src="./images/ChessBlocker256.png">
 
 ## How it works
-The user should configure his username in the extension settings, and the number of games permitted to play every day.<br/>
-When browsing chess.com website, the extension adds a handler to every button that starts a new game. In that handler, the extension checks with chess.com API that the user didn't reach the current day limit.
+* The user configures his username in the extension settings, and the number of games permitted to play every day.
+* When browsing chess.com website, the extension adds a handler to every button that starts a new game. In that handler, the extension checks with chess.com API that the user didn't reach the current day limit, including games from other browsers or mobile.
 ## Known Issues
-### Chess.com
 * Chess.com API supports only getting a user's games from the whole last month. This data can take a few seconds to retrieve, which can delay the button click.
 * The games data for a user can take a few seconds to update in Chess.com server, so sometimes when starting a new game, the previous game won't be counted if ended very recently.
 
@@ -31,4 +30,4 @@ When browsing chess.com website, the extension adds a handler to every button th
 
 ## Contributing
 
-`ChessBlocker` is developed at [eronnen/ChessBlocker](https://github.com/eronnen/ChessBlocker). PRs, issues, feedbacks and feature request are welcome, you can use the [issue tracker](https://github.com/eronnen/ChessBlocker/issues)
+`ChessBlocker` is developed at [eronnen/ChessBlocker](https://github.com/eronnen/ChessBlocker). PRs, issues, feedbacks and feature request are welcome, you can use the [issue tracker](https://github.com/eronnen/ChessBlocker/issues).
