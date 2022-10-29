@@ -22,7 +22,7 @@
                 "https://*.chess.com/game/live/*",
                 "https://*.chess.com/live"
             ],
-            "run_at": "document_end"
+            "run_at": "document_idle"
         }
     ],
 

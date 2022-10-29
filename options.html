@@ -2,14 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>ChessBlocker Options</title>
+    <title>ChessBlocker Settings</title>
     <style>
         .form {
             margin: 0 auto;
-            /* width: 400px; */
+            width: 600px;
 
             padding: 1em;
-            border: 1px solid #ccc;
+            padding-left: 5em;
+            padding-right: 5em;
+            border: 1px solid rgb(77, 77, 77);
             border-radius: 1em;
         }
 
@@ -25,8 +27,8 @@
 
         label {
             display: inline-block;
-            width: 250px;
-            text-align: right;
+            width: 200px;
+            text-align: left;
         }
 
         input,
@@ -47,40 +49,42 @@
             height: 5em;
         }
 
-        .button {
-            padding-left: 250px;
-        }
-
-        button {
-            margin-left: 0.5em;
+        h1 {
+            font-size: 48px;
         }
     </style>
 </head>
 
-<body>
+<body style="background-color: rgb(190, 190, 190); text-align: center;">
 
-<h1>ChessBlocker Options</h1>
+<h1>ChessBlocker Settings</h1>
 
-<div class="form">
+<div class="form" style="font-size: 14px;">
+    <h2 style="text-align: left;">General</h2>
     <ul>
-        <li>
-            <label for="chesscom.username">Chess.com username:&nbsp;&nbsp;</label>
-            <input type="text" id="chesscom.username" />
-        </li>
-        <li>
-            <label for="chesscom.gamesPerDay">Chess.com games per day:&nbsp;&nbsp;</label>
-            <input type="number" id="chesscom.gamesPerDay" min="1" />
-        </li>
         <li>
             <label for="dayStartTime">Day start time:&nbsp;&nbsp;</label>
             <input type="time" id="dayStartTime" />
         </li>
-        <li class="button">
-            <button id="save">Save</button>
+    </ul>
+    <h2 style="text-align: left;">Chess.com</h2>
+    <ul>
+        <li>
+            <label for="chesscom.username">Username:&nbsp;&nbsp;</label>
+            <input type="text" id="chesscom.username" />
+        </li>
+        <li>
+            <label for="chesscom.gamesPerDay">Games per day:&nbsp;&nbsp;</label>
+            <input type="number" id="chesscom.gamesPerDay" min="1" />
         </li>
     </ul>
+    <div style="padding-top: 20px;">
+        <button id="save" style="font-size: 18px;">Save</button>
+    </div>
+    <div id="status"></div>
 </div>
-<div id="status"></div>
+
+<img src="./images/ChessBlocker256.png" style="padding-top: 50px;"/>
 
 <script src="options.js"></script>
 

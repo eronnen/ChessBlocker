@@ -27,7 +27,6 @@ In the Chess.com website, the extension adds a callback to every button that sta
 - [ ] Prettier options UI
 - [ ] Prettier limit page UI
 - [ ] Restriction based on game time format (blitz, bullet...)
-- [ ] document_idle
 
 ## Contributing
 
