@@ -3,7 +3,7 @@ let chesscomOldUsername = '';
 function restore_day_limits(value) {
     console.debug('restore day limit: ' + value)
     chrome.storage.sync.get({
-        options_chesscom_gamesPerDay: {
+        chesscom_gamesPerDay: {
             0: 10,
             1: 10,
             2: 10,
@@ -13,14 +13,14 @@ function restore_day_limits(value) {
             6: 10,
         }
     }).then((items) => {
-        document.getElementById('chesscom.gamesPerDay').value = items.options_chesscom_gamesPerDay[0];
-        document.getElementById('chesscom.gamesPerDayMonday').value = items.options_chesscom_gamesPerDay[1];
-        document.getElementById('chesscom.gamesPerDayTuesday').value = items.options_chesscom_gamesPerDay[2];
-        document.getElementById('chesscom.gamesPerDayWednesday').value = items.options_chesscom_gamesPerDay[3];
-        document.getElementById('chesscom.gamesPerDayThursday').value = items.options_chesscom_gamesPerDay[4];
-        document.getElementById('chesscom.gamesPerDayFriday').value = items.options_chesscom_gamesPerDay[5];
-        document.getElementById('chesscom.gamesPerDaySaturday').value = items.options_chesscom_gamesPerDay[6];
-        document.getElementById('chesscom.gamesPerDaySunday').value = items.options_chesscom_gamesPerDay[0];
+        document.getElementById('chesscom.gamesPerDay').value = items.chesscom_gamesPerDay[0];
+        document.getElementById('chesscom.gamesPerDayMonday').value = items.chesscom_gamesPerDay[1];
+        document.getElementById('chesscom.gamesPerDayTuesday').value = items.chesscom_gamesPerDay[2];
+        document.getElementById('chesscom.gamesPerDayWednesday').value = items.chesscom_gamesPerDay[3];
+        document.getElementById('chesscom.gamesPerDayThursday').value = items.chesscom_gamesPerDay[4];
+        document.getElementById('chesscom.gamesPerDayFriday').value = items.chesscom_gamesPerDay[5];
+        document.getElementById('chesscom.gamesPerDaySaturday').value = items.chesscom_gamesPerDay[6];
+        document.getElementById('chesscom.gamesPerDaySunday').value = items.chesscom_gamesPerDay[0];
 
         if (value == 'dayOfWeek') {
             document.getElementById('li.chesscom.gamesPerDay').hidden = true;
@@ -47,15 +47,15 @@ function restore_day_limits(value) {
 
 function restore_options() {
     chrome.storage.sync.get({
-        options_dayStartTimeHours: 3,
-        options_dayStartTimeMinutes: 30,
-        options_chesscom_username: '',
-        options_chesscom_limitByWeekday: false
+        dayStartTimeHours: 3,
+        dayStartTimeMinutes: 30,
+        chesscom_username: '',
+        chesscom_limitByWeekday: false
     }).then((items) => {
-        chesscomOldUsername = items.options_chesscom_username;
-        document.getElementById('dayStartTime').value = `${items.options_dayStartTimeHours.toString().padStart(2,0)}:${items.options_dayStartTimeMinutes.toString().padStart(2,0)}`;
-        document.getElementById('chesscom.username').value = items.options_chesscom_username;
-        if (items.options_chesscom_limitByWeekday) {
+        chesscomOldUsername = items.chesscom_username;
+        document.getElementById('dayStartTime').value = `${items.dayStartTimeHours.toString().padStart(2,0)}:${items.dayStartTimeMinutes.toString().padStart(2,0)}`;
+        document.getElementById('chesscom.username').value = items.chesscom_username;
+        if (items.chesscom_limitByWeekday) {
             document.getElementById('chesscom.limitByWeekDay').value = 'dayOfWeek';
         }
         else {
@@ -113,10 +113,10 @@ function save_options() {
         document.getElementById('chesscom.username').value = chesscomUsername;
     }).then(() => {
         return chrome.storage.sync.set({
-            options_dayStartTimeHours: dayStartTimeHours,
-            options_dayStartTimeMinutes: dayStartTimeMinutes,
-            options_chesscom_username: chesscomUsername,
-            options_chesscom_gamesPerDay: chesscomGamesPerDay,
+            dayStartTimeHours: dayStartTimeHours,
+            dayStartTimeMinutes: dayStartTimeMinutes,
+            chesscom_username: chesscomUsername,
+            chesscom_gamesPerDay: chesscomGamesPerDay,
         });
     }).then(() => {
         const status = document.getElementById('status');

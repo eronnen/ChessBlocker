@@ -5,9 +5,9 @@ function dayOfWeekAsString(dayIndex) {
 function set_message() {
     chrome.storage.sync.get({
         chesscom_games_played_today: -1,
-        options_dayStartTimeHours: 3,
-        options_dayStartTimeMinutes: 30,
-        options_chesscom_gamesPerDay: {
+        dayStartTimeHours: 3,
+        dayStartTimeMinutes: 30,
+        chesscom_gamesPerDay: {
             0: 10,
             1: 10,
             2: 10,
@@ -26,13 +26,13 @@ function set_message() {
         
         // TODO: avoid code duplication
         let currentDate = new Date();
-        if ((   currentDate.getHours() < items.options_dayStartTimeHours || (currentDate.getHours() == items.options_dayStartTimeHours && currentDate.getMinutes() < options_dayStartTimeMinutes)) &&
-                items.options_dayStartTimeHours < 7) {
+        if ((   currentDate.getHours() < items.dayStartTimeHours || (currentDate.getHours() == items.dayStartTimeHours && currentDate.getMinutes() < dayStartTimeMinutes)) &&
+                items.dayStartTimeHours < 7) {
             // late night hours before limit - consider as previous day still
             currentDate.setDate(currentDate.getDate() - 1);
         }
 
-        document.getElementById('games_allowed_message').innerHTML = `${items.options_chesscom_gamesPerDay[currentDate.getDay()]} games were allowed today (${dayOfWeekAsString(currentDate.getDay())})`
+        document.getElementById('games_allowed_message').innerHTML = `${items.chesscom_gamesPerDay[currentDate.getDay()]} games were allowed today (${dayOfWeekAsString(currentDate.getDay())})`
     });
 }
 

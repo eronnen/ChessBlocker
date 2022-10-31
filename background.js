@@ -6,7 +6,7 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
     if (message.type == 'limit') {
         chrome.tabs.create({
-            url: '/pages/chesscom_daily_limit_page.html'
+            url: `/pages/${message.website}_daily_limit_page.html`
         });
     }
     else if (message.type == 'allow-liveChallenge-link') {

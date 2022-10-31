@@ -22,22 +22,23 @@ async function getPlayerLast2DaysGamesTimes(username) {
     currentDate.setDate(currentDate.getDate() - 1);
     const last2DaysEpoch = currentDate.getTime() / 1000;
     
+    if (!responseJson["games"]) {
+        return []
+    }
     return responseJson["games"].filter((g) => g['end_time'] >= last2DaysEpoch).map((g) => g['end_time']);
 }
 
 let g_chessComUsernamePromise = chrome.storage.sync.get({
-    options_chesscom_username: ''
+    chesscom_username: ''
 });
 
 function getLast2DaysGamesTimesPromise() {
     return g_chessComUsernamePromise.then(
-        (items) => getPlayerLast2DaysGamesTimes(items.options_chesscom_username)
+        (items) => getPlayerLast2DaysGamesTimes(items.chesscom_username)
     );
 }
 
-let g_last2DaysGamesTimesPromise = null;
 function reinitializeChessBlockerData(delayMs = 0) {
-    // TODO: initialize based on time
     if (delayMs == 0) {
         g_last2DaysGamesTimesPromise = getLast2DaysGamesTimesPromise();
     }
@@ -45,132 +46,6 @@ function reinitializeChessBlockerData(delayMs = 0) {
         delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
         g_last2DaysGamesTimesPromise = delayPromise.then(() => getLast2DaysGamesTimesPromise());
     }
-}
-
-function playButtonHandlerInternal(event, is_liveChallenge_link) {
-    if (event.created_by_chess_blocker) {
-        return;
-    }
-
-    console.debug('ChessBlocker: Clicked on play');
-    const target = event.target;
-    event.preventDefault();
-    event.stopPropagation();
-    
-    function reclickButton() {
-        restoredEvent = new MouseEvent('click', {
-            bubbles: true,
-            cancelable: true,
-            view: window,
-        });
-        restoredEvent.created_by_chess_blocker = true;
-        target.dispatchEvent(restoredEvent);
-    }
-
-    chessBlockerOptionsPromise = chrome.storage.sync.get({
-        options_dayStartTimeHours: 3,
-        options_dayStartTimeMinutes: 30,
-        options_chesscom_gamesPerDay: {
-            0: 10,
-            1: 10,
-            2: 10,
-            3: 10,
-            4: 10,
-            5: 10,
-            6: 10,
-        },
-    });
-
-    Promise.all([chessBlockerOptionsPromise, g_last2DaysGamesTimesPromise]).then(([items, last2DaysGamesTimes]) => {
-        if (!items || !last2DaysGamesTimes) {
-            throw new Error('ChessBlocker data not initialized');
-        }
-
-        let currentDate = new Date();
-        let dayStart = new Date(currentDate.getTime());
-        dayStart.setHours(items.options_dayStartTimeHours);
-        dayStart.setMinutes(items.options_dayStartTimeMinutes);
-        dayStart.setSeconds(0);
-        dayStart.setMilliseconds(0);
-        if (dayStart > currentDate) {
-            dayStart.setDate(dayStart.getDate() - 1);
-        }
-        const dayStartEpoch = dayStart.getTime() / 1000;
-
-        // TODO: avoid code duplication
-        if ((   currentDate.getHours() < items.options_dayStartTimeHours || (currentDate.getHours() == items.options_dayStartTimeHours && currentDate.getMinutes() < options_dayStartTimeMinutes)) &&
-                items.options_dayStartTimeHours < 7) {
-            // late night hours before limit - consider as previous day still
-            currentDate.setDate(currentDate.getDate() - 1);
-        }
-        const gamesPerToday = items.options_chesscom_gamesPerDay[currentDate.getDay()];
-
-        //console.debug('total games played last 2 days: ' + last2DaysGamesTimes.length);
-        //console.debug('dayStart: ' + dayStart);
-        const numberOfGamesPlayed = last2DaysGamesTimes.filter((t) => t > dayStartEpoch).length;
-        if (numberOfGamesPlayed >= gamesPerToday) {
-            // limit reached
-            console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${gamesPerToday} games`);
-            chrome.storage.sync.set({
-                chesscom_games_played_today: numberOfGamesPlayed
-            }).then(() => {
-                chrome.runtime.sendMessage(chrome.runtime.id, {
-                    type: 'limit',
-                    numberOfGamesPlayed: numberOfGamesPlayed
-                });
-            });
-        }
-        else {
-            console.debug(`you played ${numberOfGamesPlayed}/${gamesPerToday} games today`);
-            if (is_liveChallenge_link) {
-                chrome.runtime.sendMessage(chrome.runtime.id, {
-                    type: 'allow-liveChallenge-link',
-                }).then(reclickButton);
-            }
-            else {
-                reclickButton();
-            }
-        }
-    }).catch((e) => {
-        console.error(`ChessBlocker error: ${e.message}`);
-        reclickButton();
-    });
-}
-
-function playButtonHandler(event) {
-    playButtonHandlerInternal(event, false);
-}
-
-function addPlayButtonHandlerWithPattern(parent, tag, buttonPattern, handler = playButtonHandler) {
-    for (const e of parent.querySelectorAll(tag)) {
-        if (e instanceof Element && e.textContent.match(buttonPattern)) {
-            console.debug(`ChessBlocker: hooking ${e.textContent} button`);
-            e.addEventListener('click', handler, true);
-            return true;
-        }
-    }
-}
-
-function waitForElementToExist(id, selector = null) {
-    return new Promise(resolve => {
-        element = id != null ? document.getElementById(id) : document.querySelector(selector);
-        if (element) {
-            return resolve(element);
-        }
-
-        const observer = new MutationObserver(mutations => {
-            element = id != null ? document.getElementById(id) : document.querySelector(selector)
-            if (element) {
-                resolve(element);
-                observer.disconnect();
-            }
-        });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-    });
 }
 
 async function waitForSideBarAndAddListener() {
@@ -195,13 +70,13 @@ async function waitForSideBarAndAddListener() {
 
         const buttonText = closestButton.textContent;
         if (buttonText.match(/^\s*New (\d+) min\s*$/)) {
-            playButtonHandler(event);
+            playButtonHandler(event, "chesscom", false);
         }
         else if (buttonText.match(/^\s*Play\s*$/)) {
-            playButtonHandler(event);
+            playButtonHandler(event, "chesscom", false);
         }
         else if (buttonText.match(/^\s*New (\d+) min rated\s*$/)) {
-            playButtonHandler(event);
+            playButtonHandler(event, "chesscom", false);
         }
     }, true);
 
@@ -215,7 +90,7 @@ async function initializeChessBlocker() {
         reinitializeChessBlockerData();
         await waitForElementToExist(null, '.play-quick-links-title');
         if (!addPlayButtonHandlerWithPattern(document, "a", /^\s*Play (\d+) min\s*$/, (event) => {
-            playButtonHandlerInternal(event, true);
+            playButtonHandler(event, "chesscom", true);
         })) {
             console.error("Didn't find play button in home page");
         }
@@ -275,7 +150,9 @@ async function initializeChessBlocker() {
 
                         // wait for chess.com to update last game data hopefully. TODO: remove delay?
                         reinitializeChessBlockerData(1500);
-                        if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/)) {
+                        if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/), (event) => {
+                            playButtonHandler(event, "chesscom", false);
+                        }) {
                             console.error("Didn't find play button in game over dialog");
                         }
                     }

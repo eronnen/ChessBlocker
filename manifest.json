@@ -15,7 +15,7 @@
     "content_scripts": [
         {
             "all_frames": true,
-            "js": ["scripts/chesscom.js"],
+            "js": ["scripts/contentCommon.js", "scripts/chesscom.js"],
             "matches": [
                 "https://*.chess.com/home",
                 "https://*.chess.com/play/online/*",
