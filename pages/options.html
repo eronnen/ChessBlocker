@@ -174,6 +174,61 @@
             <input type="number" id="chesscom.gamesPerDaySunday" min="1" />
         </li>
     </ul>
+    <!-- TODO: avoid code duplication? -->
+    <h2 style="text-align: left;">Lichess</h2>
+    <ul>
+        <li>
+            <label for="lichess.username">
+                <div class="tooltip">
+                    Username:
+                    <span class="tooltiptext">
+                        Lichess username. <br />
+                        must exist on the website.
+                    </span>
+                </div>
+            </label>
+            <input type="text" id="lichess.username" />
+        </li>
+        <li>
+            <label for="lichess.limitByWeekDay">Limit games by:</label>
+            <select id="lichess.limitByWeekDay">
+                <option value="day">Day</option>
+                <option value="dayOfWeek">Day of week</option>
+            </select>
+        </li>
+        <li id="li.lichess.gamesPerDay">
+            <label for="lichess.gamesPerDay">Games per day:</label>
+            <input type="number" id="lichess.gamesPerDay" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDayMonday" hidden>
+            <label for="lichess.gamesPerDayMonday">Games per Monday:</label>
+            <input type="number" id="lichess.gamesPerDayMonday" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDayTuesday" hidden>
+            <label for="lichess.gamesPerDayTuesday">Games per Tuesday:</label>
+            <input type="number" id="lichess.gamesPerDayTuesday" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDayWednesday" hidden>
+            <label for="lichess.gamesPerDayWednesday">Games per Wednesday:</label>
+            <input type="number" id="lichess.gamesPerDayWednesday" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDayThursday" hidden>
+            <label for="lichess.gamesPerDayThursday">Games per Thursday:</label>
+            <input type="number" id="lichess.gamesPerDayThursday" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDayFriday" hidden>
+            <label for="lichess.gamesPerDayFriday">Games per Friday:</label>
+            <input type="number" id="lichess.gamesPerDayFriday" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDaySaturday" hidden>
+            <label for="lichess.gamesPerDaySaturday">Games per Saturday:</label>
+            <input type="number" id="lichess.gamesPerDaySaturday" min="1" />
+        </li>
+        <li id="li.lichess.gamesPerDaySunday" hidden>
+            <label for="lichess.gamesPerDaySunday">Games per Sunday:</label>
+            <input type="number" id="lichess.gamesPerDaySunday" min="1" />
+        </li>
+    </ul>
     <div style="padding-top: 20px;">
         <button id="save" style="font-size: 18px;">Save</button>
     </div>
