@@ -9,16 +9,16 @@ chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
             url: `/pages/${message.website}_daily_limit_page.html`
         });
     }
-    else if (message.type == 'allow-liveChallenge-link') {
-        console.debug('allowing liveChallenge');
+    else if (message.type == 'allow-new-game-link') {
+        console.debug('allowing new game links');
         chrome.declarativeNetRequest.updateEnabledRulesets({
-            disableRulesetIds: ["liveChallenge_link"]
+            disableRulesetIds: [message.website + "_new_game_link"]
         }).then(senderResponse);
     }
-    else if (message.type == 'disallow-liveChallenge-link') {
-        console.debug('disallowing liveChallenge');
+    else if (message.type == 'disallow-new-game-link') {
+        console.debug('disallowing new game links');
         chrome.declarativeNetRequest.updateEnabledRulesets({
-            enableRulesetIds: ["liveChallenge_link"]
+            enableRulesetIds: [message.website + "_new_game_link"]
         });
     }
 });

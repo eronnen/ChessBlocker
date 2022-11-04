@@ -16,11 +16,6 @@ ChessBlocker is a chrome extension that limits the number of chess games you pla
 * Chess.com API supports only getting a user's games from the whole last month. This data can take a few seconds to retrieve, which can delay the button click.
 * The games data for a user can take a few seconds to update in Chess.com server, so sometimes when starting a new game, the previous game won't be counted if ended very recently.
 
-## Supported chess websites
-
-- [x] chess.com
-- [ ] lichess
-
 ## TODO
 - [ ] Request from chess.com API to get games per day instead of per month
 - [ ] Use dialog inside tab instead of opening a new tab when game limit is reached (when chrome API allows)
