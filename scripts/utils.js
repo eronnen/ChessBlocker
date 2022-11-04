@@ -118,13 +118,12 @@ function playButtonHandler(event, website, is_new_game_link, getPreviousGamesTim
         }
         
         const dayStartEpochMillis = dayStart.getTime();
-        const gamesPerToday = (items[website + "_gamesPerDay"])[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
+        const gamesLimitPerToday = (items[website + "_gamesPerDay"])[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
 
         const numberOfGamesPlayed = previousGamesTimes.filter((t) => t > dayStartEpochMillis).length;
-        if (numberOfGamesPlayed >= gamesPerToday) {
+        if (numberOfGamesPlayed >= gamesLimitPerToday) {
             // limit reached
-            console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${gamesPerToday} games`);
-            console.debug(`setting ${website + 'games_played_today'} = ${numberOfGamesPlayed}`);
+            console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${gamesLimitPerToday} games`);
             chrome.storage.sync.set({
                 [website + "_games_played_today"]: numberOfGamesPlayed
             }).then(() => {
@@ -136,7 +135,7 @@ function playButtonHandler(event, website, is_new_game_link, getPreviousGamesTim
             });
         }
         else {
-            console.debug(`you played ${numberOfGamesPlayed}/${gamesPerToday} games today`);
+            console.debug(`you played ${numberOfGamesPlayed}/${gamesLimitPerToday} games today`);
             reclickButton();
         }
     }).catch((e) => {

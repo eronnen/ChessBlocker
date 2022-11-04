@@ -21,7 +21,7 @@ function set_message() {
             return;
         }
 
-        document.getElementById('games_played_message').innerHTML = `You played ${items.lichess_games_played_today} games today!`;
+        document.getElementById('games_played_message').innerHTML = `You played more than ${items.lichess_games_played_today} games today!`;
 
         const currentWeekday = getActualWeekDayByDate(new Date(), items.dayStartTimeHours, items.dayStartTimeMinutes);
         document.getElementById('games_allowed_message').innerHTML = `${items.lichess_gamesPerDay[currentWeekday]} games were allowed today (${dayOfWeekAsString(currentWeekday)})`;
