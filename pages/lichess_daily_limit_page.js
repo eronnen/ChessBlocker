@@ -23,7 +23,7 @@ function set_message() {
 
         document.getElementById('games_played_message').innerHTML = `You played ${items.lichess_games_played_today} games today!`;
 
-        const currentWeekday = getActualWeekDayByDate(new Date());
+        const currentWeekday = getActualWeekDayByDate(new Date(), items.dayStartTimeHours, items.dayStartTimeMinutes);
         document.getElementById('games_allowed_message').innerHTML = `${items.lichess_gamesPerDay[currentWeekday]} games were allowed today (${dayOfWeekAsString(currentWeekday)})`;
     });
 }

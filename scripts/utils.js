@@ -21,29 +21,43 @@ function waitForElementToExist(id, selector = null) {
     });
 }
 
-function getLast2DaysEpochMillis(currentDate) {
-    currentDate.setHours(0);
-    currentDate.setMinutes(0);
-    currentDate.setSeconds(0);
-    currentDate.setMilliseconds(0);
-    currentDate.setDate(currentDate.getDate() - 1);
-    return currentDate.getTime();
+function getLast2DaysEpochMillis(date) {
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+    date.setDate(date.getDate() - 1);
+    return date.getTime();
 }
 
-function getActualWeekDayByDate(date, dayStartTimeHours, dayStartTimeMinutes) {
-    // returns the actual date according to dayStartTimeHours/dayStartTimeMinutes values
-
+function getDayStart(date, dayStartTimeHours, dayStartTimeMinutes) {
     const copyDate = new Date(date);
     if ((   copyDate.getHours() < dayStartTimeHours || (copyDate.getHours() == dayStartTimeHours && copyDate.getMinutes() < dayStartTimeMinutes)) &&
-            dayStartTimeHours < 7) {
+            dayStartTimeHours < 12) {
         // late night hours before limit - consider as previous day still
         copyDate.setDate(copyDate.getDate() - 1);
     }
 
-    return copyDate.getDay()
+    copyDate.setHours(dayStartTimeHours);
+    copyDate.setMinutes(dayStartTimeMinutes);
+
+    return copyDate;
 }
 
-function playButtonHandler(event, website, is_new_game_link, getLast2DaysGamesTimesPromise) {
+function getActualWeekDayByDate(date, dayStartTimeHours, dayStartTimeMinutes) {
+    // returns the actual date according to dayStartTimeHours/dayStartTimeMinutes values
+    const dayStart = getDayStart(date, dayStartTimeHours, dayStartTimeMinutes);
+
+    // if current time is before day start (meaning next day starts at the evening) 
+    // then increment day because it was started in the before evening (wednesday night => thursday)
+    if (date < dayStart) {
+        dayStart.setDate(dayStart.getDate() + 1);
+    }
+
+    return dayStart.getDay();
+}
+
+function playButtonHandler(event, website, is_new_game_link, getPreviousGamesTimesPromise) {
     if (event.created_by_chess_blocker) {
         return;
     }
@@ -73,6 +87,7 @@ function playButtonHandler(event, website, is_new_game_link, getLast2DaysGamesTi
     chessBlockerOptionsPromise = chrome.storage.sync.get({
         dayStartTimeHours: 3,
         dayStartTimeMinutes: 30,
+        [website + "_username"]: '',
         [website + "_gamesPerDay"]: {
             0: 10,
             1: 10,
@@ -84,8 +99,11 @@ function playButtonHandler(event, website, is_new_game_link, getLast2DaysGamesTi
         },
     });
 
-    Promise.all([chessBlockerOptionsPromise, getLast2DaysGamesTimesPromise()]).then(([items, last2DaysGamesTimes]) => {
-        if (!items || !last2DaysGamesTimes) {
+    chessBlockerOptionsPromise.then((items) => {
+        previousGamesTimesPromise = getPreviousGamesTimesPromise(items);
+        return Promise.all([Promise.resolve(items), previousGamesTimesPromise]);
+    }).then(([items, previousGamesTimes]) => {
+        if (!items || !previousGamesTimes) {
             throw new Error('ChessBlocker data not initialized');
         }
 
@@ -102,7 +120,7 @@ function playButtonHandler(event, website, is_new_game_link, getLast2DaysGamesTi
         const dayStartEpochMillis = dayStart.getTime();
         const gamesPerToday = (items[website + "_gamesPerDay"])[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
 
-        const numberOfGamesPlayed = last2DaysGamesTimes.filter((t) => t > dayStartEpochMillis).length;
+        const numberOfGamesPlayed = previousGamesTimes.filter((t) => t > dayStartEpochMillis).length;
         if (numberOfGamesPlayed >= gamesPerToday) {
             // limit reached
             console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${gamesPerToday} games`);
