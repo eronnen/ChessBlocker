@@ -62,9 +62,8 @@ function addLoadingAnimation() {
     animationStyle.innerHTML = "@keyframes ChessBlockerLoading { 0% { opacity: 1; transform: translateY(2.5rem); } 100% { opacity: 1; transform: translateY(0); } }";
     document.head.appendChild(animationStyle);
 
-    const icon32 = chrome.runtime.getURL("images/ChessBlocker32.png");
     let loadingElement = document.createElement('div');
-    loadingElement.innerHTML = `<img src="${icon32}" style="vertical-align:middle">checking today games...<img src="${icon32}" style="vertical-align:middle">`;
+    loadingElement.innerHTML = `ChessBlocker: checking today games...`;
     loadingElement.style.cssText = 'position: fixed; bottom: 0; left: 50%; font-size: 1.25em; font-weight: bold; color: black; background: rgb(190, 190, 190); border: 1px solid rgb(77, 77, 77); border-radius: 5px;';
     loadingElement.style.setProperty('animation', 'ChessBlockerLoading 0.5s ease-out 1s backwards');
     document.body.appendChild(loadingElement);
