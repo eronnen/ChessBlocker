@@ -55,7 +55,7 @@ async function getLast2DaysGamesTimesPromiseGlobal(items) {
 async function waitForSideBarAndAddListener() {
     const sideBarElement = await waitForElementToExist("board-layout-sidebar");
     if (!sideBarElement) {
-        throw new Error('Didnt find sidebar on live game');
+        throw new Error('ChessBlocker: Didnt find sidebar on live game');
     }
 
     sideBarElement.addEventListener('click', (event) => {
@@ -96,7 +96,7 @@ async function initializeChessBlocker() {
         if (!addPlayButtonHandlerWithPattern(document, "a", /^\s*Play (\d+) min\s*$/, (event) => {
             playButtonHandler(event, "chesscom", true, getLast2DaysGamesTimesPromiseGlobal);
         })) {
-            console.error("Didn't find play button in home page");
+            console.error("ChessBlocker: Didn't find play button in home page");
         }
     }
     else if (pagePath.startsWith('/game/live') || pagePath.startsWith('/play/online')) {
@@ -112,7 +112,7 @@ async function initializeChessBlocker() {
         reinitializeChessBlockerData();
         const sideBarElement = await waitForSideBarAndAddListener();
 
-        const sidebarObserver = new MutationObserver((mutationList, observer) => {
+        const sidebarObserver = new MutationObserver((mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.type != "childList") {
                     continue;
@@ -158,7 +158,7 @@ async function initializeChessBlocker() {
                         if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/), (event) => {
                             playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
                         }) {
-                            console.error("Didn't find play button in game over dialog");
+                            console.error("ChessBlocker: Didn't find play button in game over dialog");
                         }
                     }
                 }
