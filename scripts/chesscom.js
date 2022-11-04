@@ -1,3 +1,5 @@
+let g_last2DaysGamesTimesPromise = null;
+
 async function getPlayerLast2DaysGamesTimes(username) {
     // TODO: update if chess.com supports smaller units then month
     
@@ -14,18 +16,11 @@ async function getPlayerLast2DaysGamesTimes(username) {
     console.debug('ChessBlocker: done fetching');
     const responseJson = await response.json();
     
-    // set currentDate to the start of last day
-    currentDate.setHours(0);
-    currentDate.setMinutes(0);
-    currentDate.setSeconds(0);
-    currentDate.setMilliseconds(0);
-    currentDate.setDate(currentDate.getDate() - 1);
-    const last2DaysEpoch = currentDate.getTime() / 1000;
-    
+    const last2DaysEpoch = getLast2DaysEpochMillis(currentDate) / 1000;
     if (!responseJson["games"]) {
         return []
     }
-    return responseJson["games"].filter((g) => g['end_time'] >= last2DaysEpoch).map((g) => g['end_time']);
+    return responseJson["games"].filter((g) => g['end_time'] >= last2DaysEpoch).map((g) => g['end_time'] * 1000);
 }
 
 let g_chessComUsernamePromise = chrome.storage.sync.get({
@@ -46,6 +41,12 @@ function reinitializeChessBlockerData(delayMs = 0) {
         delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
         g_last2DaysGamesTimesPromise = delayPromise.then(() => getLast2DaysGamesTimesPromise());
     }
+}
+
+async function getLast2DaysGamesTimesPromiseGlobal() {
+    // Using a global so we can update the value before needed in button, since 
+    // chess.com API can be very slow because we need to query a whole month
+    return g_last2DaysGamesTimesPromise;
 }
 
 async function waitForSideBarAndAddListener() {
@@ -70,13 +71,13 @@ async function waitForSideBarAndAddListener() {
 
         const buttonText = closestButton.textContent;
         if (buttonText.match(/^\s*New (\d+) min\s*$/)) {
-            playButtonHandler(event, "chesscom", false);
+            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
         }
         else if (buttonText.match(/^\s*Play\s*$/)) {
-            playButtonHandler(event, "chesscom", false);
+            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
         }
         else if (buttonText.match(/^\s*New (\d+) min rated\s*$/)) {
-            playButtonHandler(event, "chesscom", false);
+            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
         }
     }, true);
 
@@ -90,7 +91,7 @@ async function initializeChessBlocker() {
         reinitializeChessBlockerData();
         await waitForElementToExist(null, '.play-quick-links-title');
         if (!addPlayButtonHandlerWithPattern(document, "a", /^\s*Play (\d+) min\s*$/, (event) => {
-            playButtonHandler(event, "chesscom", true);
+            playButtonHandler(event, "chesscom", true, getLast2DaysGamesTimesPromiseGlobal);
         })) {
             console.error("Didn't find play button in home page");
         }
@@ -100,7 +101,8 @@ async function initializeChessBlocker() {
         if (pagePath.startsWith('/play/online/new')) {
             // allow only from chess.com link handler
             chrome.runtime.sendMessage(chrome.runtime.id, {
-                type: 'disallow-liveChallenge-link',
+                type: 'disallow-new-game-link',
+                website: 'chesscom'
             })
         }
 
@@ -151,7 +153,7 @@ async function initializeChessBlocker() {
                         // wait for chess.com to update last game data hopefully. TODO: remove delay?
                         reinitializeChessBlockerData(1500);
                         if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/), (event) => {
-                            playButtonHandler(event, "chesscom", false);
+                            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
                         }) {
                             console.error("Didn't find play button in game over dialog");
                         }

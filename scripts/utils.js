@@ -9,8 +9,8 @@ function waitForElementToExist(id, selector = null) {
         const observer = new MutationObserver(mutations => {
             element = id != null ? document.getElementById(id) : document.querySelector(selector)
             if (element) {
-                resolve(element);
                 observer.disconnect();
+                return resolve(element);
             }
         });
 
@@ -21,9 +21,29 @@ function waitForElementToExist(id, selector = null) {
     });
 }
 
-let g_last2DaysGamesTimesPromise = null;
+function getLast2DaysEpochMillis(currentDate) {
+    currentDate.setHours(0);
+    currentDate.setMinutes(0);
+    currentDate.setSeconds(0);
+    currentDate.setMilliseconds(0);
+    currentDate.setDate(currentDate.getDate() - 1);
+    return currentDate.getTime();
+}
 
-function playButtonHandler(event, website, is_liveChallenge_link) {
+function getActualWeekDayByDate(date, dayStartTimeHours, dayStartTimeMinutes) {
+    // returns the actual date according to dayStartTimeHours/dayStartTimeMinutes values
+
+    const copyDate = new Date(date);
+    if ((   copyDate.getHours() < dayStartTimeHours || (copyDate.getHours() == dayStartTimeHours && copyDate.getMinutes() < dayStartTimeMinutes)) &&
+            dayStartTimeHours < 7) {
+        // late night hours before limit - consider as previous day still
+        copyDate.setDate(copyDate.getDate() - 1);
+    }
+
+    return copyDate.getDay()
+}
+
+function playButtonHandler(event, website, is_new_game_link, getLast2DaysGamesTimesPromise) {
     if (event.created_by_chess_blocker) {
         return;
     }
@@ -34,9 +54,10 @@ function playButtonHandler(event, website, is_liveChallenge_link) {
     event.stopPropagation();
     
     async function reclickButton() {
-        if (is_liveChallenge_link) {
+        if (is_new_game_link) {
             await chrome.runtime.sendMessage(chrome.runtime.id, {
-                type: 'allow-liveChallenge-link',
+                type: 'allow-new-game-link',
+                website: website
             });
         }
 
@@ -63,7 +84,7 @@ function playButtonHandler(event, website, is_liveChallenge_link) {
         },
     });
 
-    Promise.all([chessBlockerOptionsPromise, g_last2DaysGamesTimesPromise]).then(([items, last2DaysGamesTimes]) => {
+    Promise.all([chessBlockerOptionsPromise, getLast2DaysGamesTimesPromise()]).then(([items, last2DaysGamesTimes]) => {
         if (!items || !last2DaysGamesTimes) {
             throw new Error('ChessBlocker data not initialized');
         }
@@ -77,20 +98,15 @@ function playButtonHandler(event, website, is_liveChallenge_link) {
         if (dayStart > currentDate) {
             dayStart.setDate(dayStart.getDate() - 1);
         }
-        const dayStartEpoch = dayStart.getTime() / 1000;
+        
+        const dayStartEpochMillis = dayStart.getTime();
+        const gamesPerToday = (items[website + "_gamesPerDay"])[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
 
-        // TODO: avoid code duplication
-        if ((   currentDate.getHours() < items.dayStartTimeHours || (currentDate.getHours() == items.dayStartTimeHours && currentDate.getMinutes() < dayStartTimeMinutes)) &&
-                items.dayStartTimeHours < 7) {
-            // late night hours before limit - consider as previous day still
-            currentDate.setDate(currentDate.getDate() - 1);
-        }
-        const gamesPerToday = (items[website + "_gamesPerDay"])[currentDate.getDay()];
-
-        const numberOfGamesPlayed = last2DaysGamesTimes.filter((t) => t > dayStartEpoch).length;
+        const numberOfGamesPlayed = last2DaysGamesTimes.filter((t) => t > dayStartEpochMillis).length;
         if (numberOfGamesPlayed >= gamesPerToday) {
             // limit reached
             console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${gamesPerToday} games`);
+            console.debug(`setting ${website + 'games_played_today'} = ${numberOfGamesPlayed}`);
             chrome.storage.sync.set({
                 [website + "_games_played_today"]: numberOfGamesPlayed
             }).then(() => {

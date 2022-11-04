@@ -1,0 +1,11 @@
+[
+    {
+        "id": 2,
+        "priority": 1,
+        "action": { "type": "redirect", "redirect": {"extensionPath": "/pages/lichess_block_pool_new_game_link.html"}},
+        "condition": {
+            "urlFilter": "lichess.org/#pool/*",
+            "resourceTypes": ["main_frame"]
+        }   
+    }
+]

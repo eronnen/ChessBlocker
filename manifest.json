@@ -15,7 +15,7 @@
     "content_scripts": [
         {
             "all_frames": true,
-            "js": ["scripts/contentCommon.js", "scripts/chesscom.js"],
+            "js": ["scripts/utils.js", "scripts/chesscom.js"],
             "matches": [
                 "https://*.chess.com/home",
                 "https://*.chess.com/play/online/*",
@@ -23,6 +23,13 @@
                 "https://*.chess.com/live"
             ],
             "run_at": "document_idle"
+        },
+        {
+            "all_frames": true,
+            "js": ["scripts/utils.js", "scripts/lichess.js"],
+            "matches": [
+                "https://*.lichess.org/*"
+            ]
         }
     ],
 
@@ -39,14 +46,20 @@
     "declarative_net_request": {
         "rule_resources": [
             {
-                "id": "liveChallenge_link",
+                "id": "chesscom_new_game_link",
                 "enabled": true,
-                "path": "liveChallenge_rules.json"
+                "path": "scripts/chesscom_new_game_link_rules.json"
+            },
+            {
+                "id": "lichess_new_game_link",
+                "enabled": true,
+                "path": "scripts/lichess_new_game_link_rules.json"
             }
         ]
     },
     "host_permissions": [
-        "https://*.chess.com/play/online/new?action=createLiveChallenge*"
+        "https://*.chess.com/play/online/new?action=createLiveChallenge*",
+        "https://*.lichess.org/#pool/*"
     ],
 
     "options_page": "pages/options.html",
