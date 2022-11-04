@@ -6,6 +6,8 @@ async function getLichessPlayerLastDayGamesTimes(items) {
         return [];
     }
 
+    const removeLoadingAnimation = addLoadingAnimation();
+
     const currentDate = new Date();
     const gamesLimitPerToday = items.lichess_gamesPerDay[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
     const dayStartEpochMillis = getDayStart(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes).getTime();
@@ -54,6 +56,7 @@ async function getLichessPlayerLastDayGamesTimes(items) {
         gameTimes.push(gameJson["createdAt"]);
     }
     console.debug('ChessBlocker: done parsing ndjson ' + gameTimes.length);
+    removeLoadingAnimation();
 
     return gameTimes;
 }

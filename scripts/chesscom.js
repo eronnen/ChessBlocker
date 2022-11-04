@@ -14,10 +14,12 @@ async function getPlayerLast2DaysGamesTimes(username) {
     let currentDate = new Date();
     
     // TODO: solve edge case in the first day of a month and retrieve for previous month too
+    const removeLoadingAnimation = addLoadingAnimation();
     console.debug('ChessBlocker: fetching chess.com games for ' + username);
     const response = await fetch(`https://api.chess.com/pub/player/${username}/games/${currentDate.getFullYear()}/${(currentDate.getMonth() + 1).toString().padStart(2,0)}`, {method: 'GET', headers: {'Accept': 'application/json'}});
     console.debug('ChessBlocker: done fetching');
     const responseJson = await response.json();
+    removeLoadingAnimation();
     
     const last2DaysEpoch = getLast2DaysEpochMillis(currentDate) / 1000;
     if (!responseJson["games"]) {
