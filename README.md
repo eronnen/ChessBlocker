@@ -1,6 +1,6 @@
 # ChessBlocker
 
-ChessBlocker is a chrome extension that limits the number of chess games you play per day.
+ChessBlocker is a chrome extension that limits the number of chess games you play per day on Chess.com and Lichess.
 
 <img src="./images/ChessBlocker256.png">
 
@@ -11,7 +11,7 @@ ChessBlocker is a chrome extension that limits the number of chess games you pla
 4. Configure your username in the options page
 ## How it works
 * The user configures his username in the extension settings, and the number of games permitted to play every day.
-* When browsing chess.com/lichess website, the extension adds a handler to every button that starts a new game. In that handler, the extension checks with chess.com/lichess API that the user didn't reach the current day limit, including games from other browsers or mobile.
+* When browsing chess.com or lichess website, the extension adds a handler to every button that starts a new game. In that handler, the extension checks with chess.com or lichess API that the user didn't reach the current day limit, including games from other browsers or mobile.
 ## Known Issues
 * Chess.com API supports only getting a user's games from the whole last month. This data can take a few seconds to retrieve, which can delay the button click.
 * The games data for a user can take a few seconds to update in Chess.com server, so sometimes when starting a new game, the previous game won't be counted if ended very recently.
@@ -19,12 +19,11 @@ ChessBlocker is a chrome extension that limits the number of chess games you pla
 
 ## TODO
 - [ ] Show number of games in popup
-- [ ] Add loading animation when it takes a lot of times to retrieve games in window top
 - [ ] Prettier settings page UI
 - [ ] Prettier limit page UI
 - [ ] Prettier popup
 - [ ] Restriction based on game type (blitz, bullet...)
-- [ ] Add browser based counting (instead of always using chess.com/lichess API)
+- [ ] Add browser based counting (instead of always using chess.com or lichess API)
 - [ ] Request from chess.com API to get games per day instead of per month
 - [ ] Use dialog inside tab instead of opening a new tab when game limit is reached (when chrome API allows)
 - [ ] Convert to TypeScript

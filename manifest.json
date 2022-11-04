@@ -72,11 +72,7 @@
     "web_accessible_resources": [
         {
             "resources": ["/images/*", "pages/*"],
-            "matches": ["https://*.lichess.org/*"]
-        },
-        {
-            "resources": ["/images/*", "pages/*"],
-            "matches": ["https://*.chess.com/*"]
+            "matches": ["<all_urls>"]
         }
     ]
 }
