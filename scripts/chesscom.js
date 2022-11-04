@@ -1,3 +1,6 @@
+// since we cache the result, we retrieve the previous 2 days in case date start changes in the settings.
+// also chess.com supports getting only the last month, so we retrieve the past 2 days anyway (except in a month start)
+
 let g_last2DaysGamesTimesPromise = null;
 
 async function getPlayerLast2DaysGamesTimes(username) {
@@ -43,7 +46,7 @@ function reinitializeChessBlockerData(delayMs = 0) {
     }
 }
 
-async function getLast2DaysGamesTimesPromiseGlobal() {
+async function getLast2DaysGamesTimesPromiseGlobal(items) {
     // Using a global so we can update the value before needed in button, since 
     // chess.com API can be very slow because we need to query a whole month
     return g_last2DaysGamesTimesPromise;
