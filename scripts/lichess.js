@@ -94,10 +94,30 @@ function addListenersToPoolElements(parentElement) {
     }
 }
 
+function addListenersToRightControl(finishedGameElement) {
+    if (!finishedGameElement.classList.contains('follow-up')) {
+        return;
+    }
+
+    for (const newGameLink of finishedGameElement.querySelectorAll('a.fbt')) {
+        if (newGameLink.innerText.toLowerCase() == 'new opponent') {
+            newGameLink.addEventListener('click', (event) => {
+                playButtonHandler(event, 'lichess', true, getLichessPlayerLastDayGamesTimes);
+            }, true);
+        }
+    }
+}
+
 async function initializeChessBlocker() {
     const pagePath = document.location.pathname;
     if (pagePath == '/') {
         // home: quick pairing, Lobby
+        
+        // disallow again
+        chrome.runtime.sendMessage(chrome.runtime.id, {
+            type: 'disallow-new-game-link',
+            website: 'lichess'
+        });
 
         // observing everything because the user can switch between quick pairing and lobby
         const poolMenuObserver = new MutationObserver((mutationList) => {
@@ -165,6 +185,28 @@ async function initializeChessBlocker() {
 
         const lobbyTableElement = await waitForElementToExist(null, 'div.lobby__table');
         createGameObserver.observe(lobbyTableElement, {childList: true, subtree: false});
+    } else if (pagePath.match(/^\/[0-9a-z]{12}$/i)) {
+        // the user's game
+        // 12 characters is an ongoign game link. a finished game/ watching other game has 8 characters
+        const rcontrolsObserver = new MutationObserver((mutationList) => {
+            for (const mutation of mutationList) {
+                for (const addedNode of mutation.addedNodes) {
+                    if (!(addedNode instanceof Element)) {
+                        continue;
+                    }
+
+                    addListenersToRightControl(addedNode);
+                }
+            }
+        });
+
+        const rcontrolsElement = await waitForElementToExist(null, 'div.rcontrols');
+
+        // add listeners to existing elements before observing
+        for (const child of rcontrolsElement.children) {
+            addListenersToRightControl(child);
+        }
+        rcontrolsObserver.observe(rcontrolsElement, {childList: true, subtree: false});
     }
 }
 

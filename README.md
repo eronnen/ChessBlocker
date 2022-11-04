@@ -19,7 +19,7 @@ ChessBlocker is a chrome extension that limits the number of chess games you pla
 ## TODO
 - [ ] Request from chess.com API to get games per day instead of per month
 - [ ] Use dialog inside tab instead of opening a new tab when game limit is reached (when chrome API allows)
-- [ ] Add loading animation when it takes a lot of times to retrieve games (when `chrome.action.openPopup` will work in chrome... or find a different way)
+- [ ] Add loading animation when it takes a lot of times to retrieve games in window top
 - [ ] Add browser based counting (instead of always using chess.com API)
 - [ ] Show number of games in popup
 - [ ] Prettier options UI

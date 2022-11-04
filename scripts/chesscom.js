@@ -102,11 +102,11 @@ async function initializeChessBlocker() {
     else if (pagePath.startsWith('/game/live') || pagePath.startsWith('/play/online')) {
         // game link - "new x min" button appears when game ends, and there is a play button in the "New Game" tab
         if (pagePath.startsWith('/play/online/new')) {
-            // allow only from chess.com link handler
+            // disallowing again
             chrome.runtime.sendMessage(chrome.runtime.id, {
                 type: 'disallow-new-game-link',
                 website: 'chesscom'
-            })
+            });
         }
 
         reinitializeChessBlockerData();
