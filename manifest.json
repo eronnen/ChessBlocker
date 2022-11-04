@@ -73,6 +73,10 @@
         {
             "resources": ["/images/*", "pages/*"],
             "matches": ["https://*.lichess.org/*"]
+        },
+        {
+            "resources": ["/images/*", "pages/*"],
+            "matches": ["https://*.chess.com/*"]
         }
     ]
 }
