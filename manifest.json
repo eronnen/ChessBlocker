@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
     "name": "ChessBlocker",
-    "version": "0.1",
+    "version": "0.1.0",
     
     "author": "Ely Ronnen",
-    "description": "Blocking chess sites to increase productivity",
+    "description": "Limit daily chess games on Chess.com and Lichess",
     "icons": {
         "16": "images/ChessBlocker16.png",
         "32": "images/ChessBlocker32.png",

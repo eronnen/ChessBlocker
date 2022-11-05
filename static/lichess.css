@@ -1,6 +1,10 @@
+:root {
+    --LichessBackground: rgb(235, 245, 235);
+}
+
 h1 {
     font-size: 48px;
-    background-color: rgb(235, 245, 235);
+    background-color: var(--LichessBackground);
 }
 
 h2 {

@@ -1,3 +1,7 @@
+:root {
+    --ChessBlockerBackground: rgb(190, 190, 190);
+}
+
 body {
-    background-color: rgb(190, 190, 190);
+    background-color: var(--ChessBlockerBackground);
 }

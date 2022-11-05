@@ -15,6 +15,8 @@ async function updateTodayGames() {
 
     //chess.com
     if (items.chesscom_username) {
+        const chesscomGamesElement = document.getElementById('chesscom_games');
+        chesscomGamesElement.innerHTML = '<div class="loader"></div>&nbsp;Games';
         getChesscomMonthGames(items.chesscom_username, dayStart)
             .then((response) => response.json())
             .then((responseJson) => {
@@ -22,11 +24,16 @@ async function updateTodayGames() {
                 if (responseJson['games']) {
                     numberOfGames = (responseJson["games"].filter((g) => g['end_time'] * 1000 > dayStart)).length; 
                 }
-                document.getElementById('chesscom_games').innerHTML = `${numberOfGames} Games`;
+                chesscomGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
+            })
+            .catch(() => {
+                chesscomGamesElement.innerHTML = '<span style="font-weight: bold;">(Error)</span>';
             });
     }
 
     if (items.lichess_username) {
+        const lichessGamesElement = document.getElementById('lichess_games');
+        lichessGamesElement.innerHTML = '<div class="loader"></div>&nbsp;Games';
         getLichessGames(items.lichess_username, dayStart)
             .then(async (response) => {
                 let numberOfGames = 0; 
@@ -35,7 +42,10 @@ async function updateTodayGames() {
                     numberOfGames++;
                 }
 
-                document.getElementById('lichess_games').innerHTML = `${numberOfGames} Games`;
+                lichessGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
+            })
+            .catch(() => {
+                lichessGamesElement.innerHTML = '<span style="font-weight: bold;">(Error)</span>';
             });
     }
 }
