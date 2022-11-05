@@ -18,7 +18,6 @@ ChessBlocker is a chrome extension that limits the number of chess games you pla
 * If limiting to more than 20 games a day, fetching games from lichess can take more time since they limit the speed to 20 games per second.
 
 ## TODO
-- [ ] Show number of games in popup
 - [ ] Prettier settings page UI
 - [ ] Prettier limit page UI
 - [ ] Prettier popup

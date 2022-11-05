@@ -49,12 +49,12 @@
             {
                 "id": "chesscom_new_game_link",
                 "enabled": true,
-                "path": "scripts/chesscom_new_game_link_rules.json"
+                "path": "static/chesscom_new_game_link_rules.json"
             },
             {
                 "id": "lichess_new_game_link",
                 "enabled": true,
-                "path": "scripts/lichess_new_game_link_rules.json"
+                "path": "static/lichess_new_game_link_rules.json"
             }
         ]
     },
@@ -71,7 +71,11 @@
 
     "web_accessible_resources": [
         {
-            "resources": ["/images/*", "pages/*"],
+            "resources": ["/images/*", "/static/*", "/pages/*"],
+            "matches": ["https://*.chess.com/*", "https://*.lichess.org/*"]
+        },
+        {
+            "resources": ["/images/*", "/static/*"],
             "matches": ["<all_urls>"]
         }
     ]

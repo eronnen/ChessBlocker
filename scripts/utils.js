@@ -68,10 +68,52 @@ function addLoadingAnimation() {
     loadingElement.style.setProperty('animation', 'ChessBlockerLoading 0.5s ease-out 1s backwards');
     document.body.appendChild(loadingElement);
 
+    // return removeLoadingAnimation function
     return function() {
         document.body.removeChild(loadingElement);
         document.head.removeChild(animationStyle);
     };
+}
+
+function getChesscomMonthGames(username, date) {
+    return fetch(`https://api.chess.com/pub/player/${username}/games/${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2,0)}`, {method: 'GET', headers: {'Accept': 'application/json'}});
+}
+
+function getLichessGames(username, fromDate, maxGames=0) {
+    let endpoint = `https://lichess.org/api/games/user/${username}?since=${fromDate.getTime()}&moves=false`;
+    if (maxGames > 0) {
+        endpoint += `&max=${maxGames}`;
+    }
+    return fetch(endpoint, {method: 'GET', headers: {'Accept': 'application/x-ndjson'}});
+}
+
+async function* readLichessGamesResponseLines(response) {
+    const utf8Decoder = new TextDecoder('utf-8');
+    const responseReader = response.body.getReader();
+    let { value: chunk, done: readerDone } = await responseReader.read();
+
+    while (true) {
+        // assuming chunks don't end mid-json
+        if (chunk) {
+            let currentIndex = 0;
+            while (currentIndex < chunk.length) {
+                const nextLineEndingIndex = chunk.indexOf('\n'.charCodeAt(), currentIndex);
+                if (nextLineEndingIndex == -1) {
+                    console.error("ChessBlocker: got chunk without new line");
+                    break;
+                }
+
+                yield utf8Decoder.decode(chunk.slice(currentIndex, nextLineEndingIndex));
+                currentIndex = nextLineEndingIndex + 1;
+            }
+        }
+
+        if (readerDone) {
+            break;
+        }
+
+        ({ value: chunk, done: readerDone } = await responseReader.read());
+    }
 }
 
 function playButtonHandler(event, website, is_new_game_link, getPreviousGamesTimesPromise) {

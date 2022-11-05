@@ -5,15 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="chessblocker.css">
+    <link rel="stylesheet" href="../static/chessblocker.css">
 </head>
 <body>
     <a id="settingsButton" style="cursor: pointer;">
         <!-- <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Pixel perfect - Flaticon</a> -->
-        <img src="../images/settings.png" title="ChessBlocker settings">
+        <img src="../images/settings16.png" title="ChessBlocker settings" style="position: fixed; top: 10%; right: 4%;">
+        <img src="../images/ChessBlocker16.png" title="ChessBlocker settings" style="position: fixed; bottom: 10%; right: 4%;">
         <!-- <img src="./images/ChessBlocker32.png"> -->
     </a>
+    <table style="width: 180px;">
+        <tr>
+            <td colspan="2" style="font-size: 1.3em; font-weight: bold;">Today Chess Stats</td>
+        </tr>
+        <tr>
+            <td>Chess.com:</td>
+            <td id="chesscom_games">- Games</td>
+        </tr>
+        <tr>
+            <td>Lichess:</td>
+            <td id="lichess_games">- Games</td>
+        </tr>   
+    </table>
 
-    <script src="./popup.js" type="module"></script>
+    <script src="../scripts/utils.js"></script>
+    <script src="./popup.js"></script>
 </body>
 </html>

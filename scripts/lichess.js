@@ -10,43 +10,14 @@ async function getLichessPlayerLastDayGamesTimes(items) {
 
     const currentDate = new Date();
     const gamesLimitPerToday = items.lichess_gamesPerDay[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
-    const dayStartEpochMillis = getDayStart(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes).getTime();
+    const dayStartDate = getDayStart(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes);
+    
     console.debug('ChessBlocker: fetching lichess.org games for ' + items.lichess_username);
-    const response = await fetch(`https://lichess.org/api/games/user/${items.lichess_username}?since=${dayStartEpochMillis}&max=${gamesLimitPerToday}&moves=false`, 
-        {method: 'GET', headers: {'Accept': 'application/x-ndjson'}});
+    const response = await getLichessGames(items.lichess_username, dayStartDate, gamesLimitPerToday);
     console.debug('ChessBlocker: done fetching');
-
-    async function* readResponseLines() {
-        const utf8Decoder = new TextDecoder('utf-8');
-        const responseReader = response.body.getReader();
-        let { value: chunk, done: readerDone } = await responseReader.read();
-
-        while (true) {
-            // assuming chunks don't end mid-json
-            if (chunk) {
-                let currentIndex = 0;
-                while (currentIndex < chunk.length) {
-                    const nextLineEndingIndex = chunk.indexOf('\n'.charCodeAt(), currentIndex);
-                    if (nextLineEndingIndex == -1) {
-                        console.error("ChessBlocker: got chunk without new line");
-                        break;
-                    }
-
-                    yield utf8Decoder.decode(chunk.slice(currentIndex, nextLineEndingIndex));
-                    currentIndex = nextLineEndingIndex + 1;
-                }
-            }
-
-            if (readerDone) {
-                break;
-            }
-
-            ({ value: chunk, done: readerDone } = await responseReader.read());
-        }
-    }
     
     let gameTimes = [];
-    for await (const gameJsonText of readResponseLines()) {
+    for await (const gameJsonText of readLichessGamesResponseLines(response)) {
         const gameJson = JSON.parse(gameJsonText);
         if (!gameJson["createdAt"]) {
             console.warn("ChessBlocker: got lichess game without createdAt");

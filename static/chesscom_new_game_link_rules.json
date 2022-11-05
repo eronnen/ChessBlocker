@@ -2,7 +2,7 @@
     {
         "id": 1,
         "priority": 1,
-        "action": { "type": "redirect", "redirect": {"extensionPath": "/pages/chesscom_block_pool_new_game_link.html"}},
+        "action": { "type": "redirect", "redirect": {"extensionPath": "/static/chesscom_block_pool_new_game_link.html"}},
         "condition": {
             "urlFilter": "chess.com/play/online/new?action=createLiveChallenge*",
             "resourceTypes": ["main_frame"]
