@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "ChessBlocker",
-    "version": "0.1.0",
+    "version": "0.1.1",
     
     "author": "Ely Ronnen",
     "description": "Limit daily chess games on Chess.com and Lichess",
