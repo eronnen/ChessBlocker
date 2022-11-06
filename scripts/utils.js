@@ -59,12 +59,12 @@ function getActualWeekDayByDate(date, dayStartTimeHours, dayStartTimeMinutes) {
 
 function addLoadingAnimation() {
     let animationStyle = document.createElement('style');
-    animationStyle.innerHTML = "@keyframes ChessBlockerLoading { 0% { opacity: 1; transform: translateY(2.5rem); } 100% { opacity: 1; transform: translateY(0); } }";
+    animationStyle.innerHTML = "@keyframes ChessBlockerLoading { 0% { opacity: 1; transform: translateY(3.5rem); } 100% { opacity: 1; transform: translateY(0); } }";
     document.head.appendChild(animationStyle);
 
     let loadingElement = document.createElement('div');
-    loadingElement.innerHTML = `ChessBlocker: checking today games...`;
-    loadingElement.style.cssText = 'position: fixed; bottom: 0; left: 50%; font-size: 1.25em; font-weight: bold; color: black; background: rgb(190, 190, 190); border: 1px solid rgb(77, 77, 77); border-radius: 5px;';
+    loadingElement.innerHTML = `ChessBlocker: checking games...`;
+    loadingElement.style.cssText = 'position: fixed; bottom: 0; left: 40%; font-size: 21px; font-weight: bold; color: black; background: rgb(190, 190, 190); border: 0.15em solid rgb(77, 77, 77); border-radius: 5px;';
     loadingElement.style.setProperty('animation', 'ChessBlockerLoading 0.5s ease-out 1s backwards');
     document.body.appendChild(loadingElement);
 
