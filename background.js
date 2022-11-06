@@ -1,6 +1,8 @@
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((details) => {
     console.debug('ChessBlocker: installed');
-    chrome.runtime.openOptionsPage();
+    if (details.reason == 'install') {
+        chrome.runtime.openOptionsPage();
+    }
 });
 
 chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
