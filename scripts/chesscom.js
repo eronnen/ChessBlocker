@@ -3,7 +3,7 @@
 
 let g_last2DaysGamesTimesPromise = null;
 
-async function getPlayerLast2DaysGamesTimes(username) {
+async function getPlayerLast2DaysGamesTimes(username, delayMs = 0) {
     // TODO: update if chess.com supports smaller units then month
     
     if (!username) {
@@ -15,6 +15,7 @@ async function getPlayerLast2DaysGamesTimes(username) {
     
     // TODO: solve edge case in the first day of a month and retrieve for previous month too
     const removeLoadingAnimation = addLoadingAnimation();
+    await new Promise(resolve => setTimeout(resolve, delayMs));
     console.debug('ChessBlocker: fetching chess.com games for ' + username);
     const response = await getChesscomMonthGames(username, currentDate);
     console.debug('ChessBlocker: done fetching');
@@ -32,20 +33,14 @@ let g_chessComUsernamePromise = chrome.storage.sync.get({
     chesscom_username: ''
 });
 
-function getLast2DaysGamesTimesPromise() {
+function getLast2DaysGamesTimesPromise(delayMs = 0) {
     return g_chessComUsernamePromise.then(
-        (items) => getPlayerLast2DaysGamesTimes(items.chesscom_username)
+        (items) => getPlayerLast2DaysGamesTimes(items.chesscom_username, delayMs)
     );
 }
 
 function reinitializeChessBlockerData(delayMs = 0) {
-    if (delayMs == 0) {
-        g_last2DaysGamesTimesPromise = getLast2DaysGamesTimesPromise();
-    }
-    else {
-        delayPromise = new Promise(resolve => setTimeout(resolve, delayMs));
-        g_last2DaysGamesTimesPromise = delayPromise.then(() => getLast2DaysGamesTimesPromise());
-    }
+    g_last2DaysGamesTimesPromise = getLast2DaysGamesTimesPromise(delayMs);
 }
 
 async function getLast2DaysGamesTimesPromiseGlobal(items) {
