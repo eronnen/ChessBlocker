@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "ChessBlocker",
-    "version": "0.1.1",
+    "version": "0.1.2",
     
     "author": "Ely Ronnen",
     "description": "Limit daily chess games on Chess.com and Lichess",
@@ -35,7 +35,7 @@
     ],
 
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "scripts/background.js"
     },
 
     "permissions": [
