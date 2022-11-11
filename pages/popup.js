@@ -34,14 +34,8 @@ async function updateTodayGames() {
     if (items.lichess_username) {
         const lichessGamesElement = document.getElementById('lichess_games');
         lichessGamesElement.innerHTML = '<div class="loader"></div>&nbsp;Games';
-        getLichessGames(items.lichess_username, dayStart)
-            .then(async (response) => {
-                let numberOfGames = 0; 
-                for await (const gameJsonText of readLichessGamesResponseLines(response)) {
-                    //assume every line is a game without parsing...
-                    numberOfGames++;
-                }
-
+        getLichessGamesNumber(items.lichess_username, dayStart)
+            .then((numberOfGames) => {
                 lichessGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
             })
             .catch(() => {

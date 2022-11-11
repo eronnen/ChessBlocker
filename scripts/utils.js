@@ -116,6 +116,18 @@ async function* readLichessGamesResponseLines(response) {
     }
 }
 
+async function getLichessGamesNumber(username, fromDate, maxGames=0) {
+    return getLichessGames(username, fromDate, maxGames).then(async (response) => {
+        let numberOfGames = 0; 
+        for await (const gameJsonText of readLichessGamesResponseLines(response)) {
+            //assume every line is a game without parsing...
+            numberOfGames++;
+        }
+
+        return numberOfGames;
+    });
+}
+
 function playButtonHandler(event, website, is_new_game_link, getPreviousGamesTimesPromise) {
     if (event.created_by_chess_blocker) {
         return;
@@ -159,7 +171,7 @@ function playButtonHandler(event, website, is_new_game_link, getPreviousGamesTim
     });
 
     chessBlockerOptionsPromise.then((items) => {
-        previousGamesTimesPromise = getPreviousGamesTimesPromise(items);
+        const previousGamesTimesPromise = getPreviousGamesTimesPromise(items);
         return Promise.all([Promise.resolve(items), previousGamesTimesPromise]);
     }).then(([items, previousGamesTimes]) => {
         if (!items || !previousGamesTimes) {
