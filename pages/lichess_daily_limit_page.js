@@ -3,10 +3,14 @@ function dayOfWeekAsString(dayIndex) {
 }
 
 function set_message() {
+    const currentDate = new Date();
+    const messageElement = document.getElementById('games_played_message');
+    messageElement.innerHTML = 'You played <div class="loader"></div> games today!';
+
     chrome.storage.sync.get({
-        lichess_games_played_today: -1,
         dayStartTimeHours: 3,
         dayStartTimeMinutes: 30,
+        lichess_username: '',
         lichess_gamesPerDay: {
             0: 10,
             1: 10,
@@ -17,14 +21,21 @@ function set_message() {
             6: 10,
         }
     }).then((items) => {
-        if (items.lichess_games_played_today < 0) {
-            return;
+        if (!items.lichess_username) {
+            return Promise.resolve(0);
         }
 
-        document.getElementById('games_played_message').innerHTML = `You played more than ${items.lichess_games_played_today} games today!`;
+        const dayStart = getDayStart(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes);
+        const numberOfGamesPromise = getLichessGamesNumber(items.lichess_username, dayStart);
 
         const currentWeekday = getActualWeekDayByDate(new Date(), items.dayStartTimeHours, items.dayStartTimeMinutes);
         document.getElementById('games_allowed_message').innerHTML = `${items.lichess_gamesPerDay[currentWeekday]} games were allowed today (${dayOfWeekAsString(currentWeekday)})`;
+
+        return numberOfGamesPromise; 
+    }).then((numberOfGames) => {
+        messageElement.innerHTML = `You played ${numberOfGames} games today!`;
+    }).catch((e) => {
+        messageElement.innerHTML = `You played enough games today! (error getting exact number: ${e})`;
     });
 }
 
