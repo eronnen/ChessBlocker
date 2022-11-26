@@ -40,7 +40,6 @@
 
     "permissions": [
         "storage", 
-        "tabs", 
         "declarativeNetRequest",
         "declarativeNetRequestWithHostAccess"
     ],
