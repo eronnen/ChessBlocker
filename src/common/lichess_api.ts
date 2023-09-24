@@ -1,6 +1,6 @@
-export async function* readLichessGamesResponseLines(response): AsyncGenerator<string> {
+export async function* readLichessGamesResponseLines(response: Response): AsyncGenerator<string> {
     const utf8Decoder = new TextDecoder('utf-8');
-    const responseReader = response.body.getReader();
+    const responseReader = response.body!.getReader();
     let { value: chunk, done: readerDone } = await responseReader.read();
 
     while (true) {
@@ -30,7 +30,7 @@ export async function* readLichessGamesResponseLines(response): AsyncGenerator<s
 export async function getLichessGamesCount(username: string, fromDate: Date, maxGames: number = 0) {
     return getLichessGames(username, fromDate, maxGames).then(async (response) => {
         let numberOfGames = 0; 
-        for await (const _ of readLichessGamesResponseLines(response)) {
+        for await (_ of readLichessGamesResponseLines(response)) {
             //assume every line is a game without parsing...
             numberOfGames++;
         }
@@ -39,7 +39,7 @@ export async function getLichessGamesCount(username: string, fromDate: Date, max
     });
 }
 
-export function getLichessGames(username, fromDate, maxGames=0) {
+export function getLichessGames(username: string, fromDate: Date, maxGames=0) {
     let endpoint = `https://lichess.org/api/games/user/${username}?since=${fromDate.getTime()}&moves=false`;
     if (maxGames > 0) {
         endpoint += `&max=${maxGames}`;

@@ -6,7 +6,7 @@ const WEBSITES_NAMES = {
     [LICHESS]: "Lichess.org"
 };
 
-let g_oldUsernames = {
+const g_oldUsernames = {
     [CHESSCOM]: "", 
     [LICHESS]: ""
 };
@@ -29,7 +29,7 @@ async function restoreDayLimits(website: ChessWebsiteType, limitType: LimitType)
 }
 
 async function restoreOptions() {
-    let config: ChessBlockerConfigType = {
+    const config: ChessBlockerConfigType = {
         dayStartTimeHours: DEFAULT_DAY_START_TIME_HOURS,
         dayStartTimeMinutes: DEFAULT_DAY_START_TIME_MINUTES,
     };

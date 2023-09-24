@@ -4,8 +4,9 @@ import { getLichessGames, readLichessGamesResponseLines } from '../common/liches
 
 // getting games only for last days, since we don't cache values in lichess
 
-async function getLichessPlayerLastDayGamesTimes(items): Promise<number[]> {
-    if (!items.lichess_username) {
+async function getLichessPlayerLastDayGamesTimes(items: ChessBlockerConfigType): Promise<number[]> {
+    const username = items[LICHESS]!.username;
+    if (!username) {
         console.debug('ChessBlocker: no lichess.org username configured');
         return [];
     }
@@ -13,14 +14,14 @@ async function getLichessPlayerLastDayGamesTimes(items): Promise<number[]> {
     const removeLoadingAnimation = addLoadingAnimation();
 
     const currentDate = new Date();
-    const gamesLimitPerToday = items.lichess_gamesPerDay[getActualWeekDayByDate(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes)];
-    const dayStartDate = getDayStart(currentDate, items.dayStartTimeHours, items.dayStartTimeMinutes);
+    const gamesLimitPerToday = items[LICHESS]!.gamesPerDay![getActualWeekDayByDate(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!)];
+    const dayStartDate = getDayStart(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!);
     
-    console.debug('ChessBlocker: fetching lichess.org games for ' + items.lichess_username);
-    const response = await getLichessGames(items.lichess_username, dayStartDate, gamesLimitPerToday);
+    console.debug('ChessBlocker: fetching lichess.org games for ' + username);
+    const response = await getLichessGames(username, dayStartDate, gamesLimitPerToday);
     console.debug('ChessBlocker: done fetching');
     
-    let gameTimes: number[] = [];
+    const gameTimes: number[] = [];
     for await (const gameJsonText of readLichessGamesResponseLines(response)) {
         const gameJson: object = JSON.parse(gameJsonText);
         if (!("createdAt" in gameJson)) {
@@ -36,9 +37,9 @@ async function getLichessPlayerLastDayGamesTimes(items): Promise<number[]> {
     return gameTimes;
 }
 
-function addListenersToPoolElements(parentElement) {
+function addListenersToPoolElements(parentElement: HTMLElement) {
     if (parentElement.classList.contains('lobby__app-pools')) {
-        const poolElement = parentElement.querySelector('.lpools');
+        const poolElement = parentElement.querySelector('.lpools') as HTMLElement;
         if (!poolElement) {
             console.error('ChessBlocker: didnt find pool element in added node');
             return;
@@ -61,7 +62,7 @@ function addListenersToPoolElements(parentElement) {
             if (!(event.target instanceof Element)) {
                 return;
             }
-;
+
             const targetChallengeRow = event.target.closest('tr.join');
             if (!targetChallengeRow) {
                 return;
@@ -72,14 +73,14 @@ function addListenersToPoolElements(parentElement) {
     }
 }
 
-function addListenersToRightControl(finishedGameElement) {
+function addListenersToRightControl(finishedGameElement: HTMLElement) {
     if (!finishedGameElement.classList.contains('follow-up')) {
         return;
     }
 
     for (const newGameLink of finishedGameElement.querySelectorAll('a.fbt')) {
-        if (newGameLink.innerText.toLowerCase() == 'new opponent') {
-            newGameLink.addEventListener('click', (event) => {
+        if ((newGameLink as HTMLElement).innerText.toLowerCase() == 'new opponent') {
+            (newGameLink as HTMLElement).addEventListener('click', (event: MouseEvent) => {
                 playButtonHandler(event, LICHESS, true, getLichessPlayerLastDayGamesTimes);
             }, true);
         }
@@ -105,7 +106,7 @@ async function initializeChessBlocker() {
                         continue;
                     }
 
-                    addListenersToPoolElements(addedNode);
+                    addListenersToPoolElements(addedNode as HTMLElement);
                 }
             }
         });
@@ -117,7 +118,7 @@ async function initializeChessBlocker() {
 
         // add listeners to existing elements before observing
         for (const child of lobbyElement.children) {
-            addListenersToPoolElements(child);
+            addListenersToPoolElements(child as HTMLElement);
         }
         poolMenuObserver.observe(lobbyElement, {childList: true, subtree: false});
 
@@ -173,7 +174,7 @@ async function initializeChessBlocker() {
                         continue;
                     }
 
-                    addListenersToRightControl(addedNode);
+                    addListenersToRightControl(addedNode as HTMLElement);
                 }
             }
         });
@@ -182,7 +183,7 @@ async function initializeChessBlocker() {
 
         // add listeners to existing elements before observing
         for (const child of rcontrolsElement.children) {
-            addListenersToRightControl(child);
+            addListenersToRightControl(child as HTMLElement);
         }
         rcontrolsObserver.observe(rcontrolsElement, {childList: true, subtree: false});
     }

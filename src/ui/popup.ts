@@ -31,7 +31,8 @@ async function updateTodayGames() {
             .then((responseJson) => {
                 let numberOfGames = 0;
                 if (responseJson['games']) {
-                    numberOfGames = (responseJson["games"].filter((g) => g['end_time'] * 1000 > dayStart.getDate())).length; 
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    numberOfGames = (responseJson["games"].filter((g: any) => g['end_time'] * 1000 > dayStart.getDate())).length; 
                 }
                 chesscomGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
             })
@@ -43,7 +44,7 @@ async function updateTodayGames() {
     if (items[LICHESS]!.username) {
         const lichessGamesElement = document.getElementById('lichess.games')!;
         lichessGamesElement.innerHTML = '<div class="loader"></div>&nbsp;Games';
-        getLichessGamesCount(items[LICHESS]?.username!, dayStart)
+        getLichessGamesCount(items[LICHESS]!.username!, dayStart)
             .then((numberOfGames) => {
                 lichessGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
             })
