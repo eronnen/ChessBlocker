@@ -8,7 +8,7 @@ export async function waitForElementToExist(id: string | undefined, selector: st
             return resolve(element);
         }
 
-        const observer = new MutationObserver(mutations => {
+        const observer = new MutationObserver(() => {
             element = id !== undefined ? document.getElementById(id) : document.querySelector(selector!)
             if (element) {
                 observer.disconnect();
@@ -83,7 +83,7 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
     try {
         chessBlockerOptions = await chrome.storage.sync.get(config);
         previousGamesTimes = await getPreviousGamesTimesPromise(chessBlockerOptions);
-    } catch (err: any) {
+    } catch (err) {
         console.error(`ChessBlocker error: ${err}`);
         reclickButton();
         return;
@@ -93,8 +93,8 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
         throw new Error('ChessBlocker data not initialized');
     }
 
-    let currentDate = new Date();
-    let dayStart = new Date(currentDate.getTime());
+    const currentDate = new Date();
+    const dayStart = new Date(currentDate.getTime());
     dayStart.setHours(chessBlockerOptions.dayStartTimeHours!);
     dayStart.setMinutes(chessBlockerOptions.dayStartTimeMinutes!);
     dayStart.setSeconds(0);

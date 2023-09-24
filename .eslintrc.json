@@ -6,7 +6,7 @@
   // "rules": {
   //   "@typescript-eslint/no-non-null-assertion": "off"
   // },
-  "ignorePatterns": ["dist/*", "**/*.d.ts"],
+  "ignorePatterns": ["dist/*", "**/*.d.ts"]
   // "env": {
   //   "commonjs": true
   // }

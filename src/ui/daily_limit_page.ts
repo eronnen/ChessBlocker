@@ -16,7 +16,7 @@ export async function setDailyLimitMessages(site: ChessWebsiteType, gamesPlayedE
                 gamesPlayedToday: -1,
             }
         }) as ChessBlockerConfigType;
-    } catch (err: any) {
+    } catch (err) {
         gamesPlayedElement.innerHTML = `You played enough games today! (error getting exact number: ${err})`;
         return;
     }
@@ -36,7 +36,7 @@ export async function setDailyLimitMessages(site: ChessWebsiteType, gamesPlayedE
             const dayStart = getDayStart(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!);
             const gamesCount = await getSiteGamesCount(site, items[site]!.username!, dayStart);
             gamesPlayedElement.innerHTML = `You played ${gamesCount} games today!`;
-        } catch (err: any) {
+        } catch (err) {
             gamesPlayedElement.innerHTML = `You played enough games today! (error getting exact number: ${err})`;
             return;
         }

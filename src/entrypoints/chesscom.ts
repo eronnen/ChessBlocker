@@ -15,7 +15,7 @@ async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Prom
         return [];
     }
     
-    let currentDate = new Date();
+    const currentDate = new Date();
     
     // TODO: solve edge case in the first day of a month and retrieve for previous month too
     const removeLoadingAnimation = addLoadingAnimation();
@@ -30,10 +30,12 @@ async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Prom
     if (!responseJson["games"]) {
         return []
     }
-    return responseJson["games"].filter((g: object) => g['end_time'] >= last2DaysEpoch).map((g: object) => g['end_time'] * 1000);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return responseJson["games"].filter((g: any) => g["end_time"] >= last2DaysEpoch).map((g: any) => g["end_time"] * 1000);
 }
 
-let g_chessComUsernamePromise = chrome.storage.sync.get({
+const g_chessComUsernamePromise = chrome.storage.sync.get({
     [CHESSCOM]: { username: ''},
 });
 
@@ -47,6 +49,7 @@ function reinitializeChessBlockerData(delayMs = 0) {
     g_last2DaysGamesTimesPromise = getLast2DaysGamesTimesPromise(delayMs);
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function getLast2DaysGamesTimesPromiseGlobal(items: ChessBlockerConfigType): Promise<number[]> {
     // Using a global so we can update the value before needed in button, since 
     // chess.com API can be very slow because we need to query a whole month
@@ -129,6 +132,7 @@ async function initializeChessBlocker() {
                 }
 
                 for (const removedNode of mutation.removedNodes) {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     if ((removedNode as any).data == 'Play') { // TODO: remove any
                         // game was in play, now finished
                         console.debug('ChessBlocker: chess.com game is finished');
