@@ -11,7 +11,7 @@
     {
         "id": 12,
         "priority": 1,
-        "action": { "type": "redirect", "redirect": {"extensionPath": "/static/lichess_block_pool_new_game_link.html"}},
+        "action": { "type": "redirect", "redirect": {"extensionPath": "/static/ui/lichess_block_pool_new_game_link.html"}},
         "condition": {
             "urlFilter": "lichess.org/#hook_like*",
             "resourceTypes": ["main_frame"]

@@ -1,6 +1,10 @@
+import { addLoadingAnimation, waitForElementToExist, playButtonHandler } from '../common/chess_site_hook';
+import { getDayStart, getActualWeekDayByDate } from '../common/date_utils';
+import { getLichessGames, readLichessGamesResponseLines } from '../common/lichess_api';
+
 // getting games only for last days, since we don't cache values in lichess
 
-async function getLichessPlayerLastDayGamesTimes(items) {
+async function getLichessPlayerLastDayGamesTimes(items): Promise<number[]> {
     if (!items.lichess_username) {
         console.debug('ChessBlocker: no lichess.org username configured');
         return [];
@@ -16,15 +20,15 @@ async function getLichessPlayerLastDayGamesTimes(items) {
     const response = await getLichessGames(items.lichess_username, dayStartDate, gamesLimitPerToday);
     console.debug('ChessBlocker: done fetching');
     
-    let gameTimes = [];
+    let gameTimes: number[] = [];
     for await (const gameJsonText of readLichessGamesResponseLines(response)) {
-        const gameJson = JSON.parse(gameJsonText);
-        if (!gameJson["createdAt"]) {
+        const gameJson: object = JSON.parse(gameJsonText);
+        if (!("createdAt" in gameJson)) {
             console.warn("ChessBlocker: got lichess game without createdAt");
             continue;
         }
         
-        gameTimes.push(gameJson["createdAt"]);
+        gameTimes.push(parseInt(gameJson["createdAt"] as string));
     }
     console.debug('ChessBlocker: done parsing ndjson ' + gameTimes.length);
     removeLoadingAnimation();
@@ -106,7 +110,7 @@ async function initializeChessBlocker() {
             }
         });
         
-        const lobbyElement = await waitForElementToExist(null, 'main');
+        const lobbyElement = await waitForElementToExist(undefined, 'main');
         if (!lobbyElement) {
             throw new Error('ChessBlocker: Didnt find lobby in home page');
         }
@@ -128,14 +132,14 @@ async function initializeChessBlocker() {
                     if (addedNode.id == 'modal-overlay') {
                         // opened a "Create A Game dialog"
                         
-                        const submitTray = addedNode.querySelector('div.color-submits');
-                        const timeControlSelect = addedNode.querySelector('#sf_timeMode');
+                        const submitTray = addedNode.querySelector('div.color-submits') as HTMLElement;
+                        const timeControlSelect = addedNode.querySelector('#sf_timeMode') as HTMLSelectElement;
                         if (!submitTray || !timeControlSelect) {
                             console.error('ChessBlocker: Didnt find submit tray or time control');
                             continue;
                         }
 
-                        submitTray.addEventListener('click', (event) => {
+                        submitTray.addEventListener('click', (event: ChessBlockerEvent) => {
                             if (!(event.target instanceof Element)) {
                                 return;
                             }
@@ -157,7 +161,7 @@ async function initializeChessBlocker() {
             }
         });
 
-        const lobbyTableElement = await waitForElementToExist(null, 'div.lobby__table');
+        const lobbyTableElement = await waitForElementToExist(undefined, 'div.lobby__table');
         createGameObserver.observe(lobbyTableElement, {childList: true, subtree: false});
     } else if (pagePath.match(/^\/[0-9a-z]{12}$/i)) {
         // the user's game
@@ -174,7 +178,7 @@ async function initializeChessBlocker() {
             }
         });
 
-        const rcontrolsElement = await waitForElementToExist(null, 'div.rcontrols');
+        const rcontrolsElement = await waitForElementToExist(undefined, 'div.rcontrols');
 
         // add listeners to existing elements before observing
         for (const child of rcontrolsElement.children) {
