@@ -123,7 +123,7 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
     }
 }
 
-export function addPlayButtonHandlerWithPattern(parent: Element, tag: string, buttonPattern: string, handler: (event: ChessBlockerEvent) => void) {
+export function addPlayButtonHandlerWithPattern(parent: HTMLElement, tag: string, buttonPattern: RegExp, handler: (event: ChessBlockerEvent) => void) {
     for (const e of parent.querySelectorAll(tag)) {
         if (e instanceof Element && e.textContent && e.textContent.match(buttonPattern)) {
             console.debug(`ChessBlocker: hooking ${e.textContent} button`);
