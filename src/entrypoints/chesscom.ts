@@ -1,3 +1,4 @@
+import { CHESSCOM } from "../common/constants";
 import { getChesscomMonthGames } from "../common/chesscom_api";
 import { getLast2DaysEpochMillis } from "../common/date_utils";
 import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_site_hook";

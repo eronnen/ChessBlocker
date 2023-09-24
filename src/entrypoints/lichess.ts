@@ -1,3 +1,4 @@
+import { LICHESS } from '../common/constants';
 import { addLoadingAnimation, waitForElementToExist, playButtonHandler } from '../common/chess_site_hook';
 import { getDayStart, getActualWeekDayByDate } from '../common/date_utils';
 import { getLichessGames, readLichessGamesResponseLines } from '../common/lichess_api';

@@ -1,4 +1,4 @@
-import { DEFAULT_GAMES_PER_DAY, DEFAULT_DAY_START_TIME_HOURS, DEFAULT_DAY_START_TIME_MINUTES } from "../common/constants";
+import { WEEK_DAYS, DEFAULT_GAMES_PER_DAY, DEFAULT_DAY_START_TIME_HOURS, DEFAULT_DAY_START_TIME_MINUTES } from "../common/constants";
 import { getSiteGamesCount } from "../common/chess_sites";
 import { getDayStart, getActualWeekDayByDate } from "../common/date_utils";
 

@@ -1,5 +1,6 @@
 import { getLichessGamesCount, isLichessUsernameValid } from "./lichess_api";
 import { isChesscomUsernameValid } from "./chesscom_api";
+import { CHESSCOM, LICHESS } from "./constants";
 
 export async function getSiteGamesCount(site: ChessWebsiteType, username: string, fromDate: Date, maxGames: number = 0): Promise<number> {
     switch (site) {
