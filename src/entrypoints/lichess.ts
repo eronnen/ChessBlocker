@@ -44,20 +44,20 @@ function addListenersToPoolElements(parentElement) {
             return;
         }
 
-        poolElement.addEventListener('click', (event) => {
+        poolElement.addEventListener('click', (event: MouseEvent) => {
             if (!(event.target instanceof Element)) {
                 return;
             }
 
-            const targetPoolButton = event.target.closest('div[data-id]');
+            const targetPoolButton = event.target.closest('div[data-id]') as HTMLElement;
             if (targetPoolButton != null && targetPoolButton.innerText != 'Custom') {
                 // click in one of the pool time controls
-                playButtonHandler(event, 'lichess', false, getLichessPlayerLastDayGamesTimes);
+                playButtonHandler(event, LICHESS, false, getLichessPlayerLastDayGamesTimes);
             }
         }, true);
     }
     else if (parentElement.classList.contains('lobby__app-real_time')) {
-        parentElement.addEventListener('click', (event) => {
+        parentElement.addEventListener('click', (event: MouseEvent) => {
             if (!(event.target instanceof Element)) {
                 return;
             }
@@ -67,7 +67,7 @@ function addListenersToPoolElements(parentElement) {
                 return;
             }
             
-            playButtonHandler(event, 'lichess', false, getLichessPlayerLastDayGamesTimes);
+            playButtonHandler(event, LICHESS, false, getLichessPlayerLastDayGamesTimes);
         }, true);
     }
 }
@@ -80,7 +80,7 @@ function addListenersToRightControl(finishedGameElement) {
     for (const newGameLink of finishedGameElement.querySelectorAll('a.fbt')) {
         if (newGameLink.innerText.toLowerCase() == 'new opponent') {
             newGameLink.addEventListener('click', (event) => {
-                playButtonHandler(event, 'lichess', true, getLichessPlayerLastDayGamesTimes);
+                playButtonHandler(event, LICHESS, true, getLichessPlayerLastDayGamesTimes);
             }, true);
         }
     }
@@ -94,7 +94,7 @@ async function initializeChessBlocker() {
         // disallow again
         chrome.runtime.sendMessage(chrome.runtime.id, {
             type: 'disallow-new-game-link',
-            website: 'lichess'
+            website: LICHESS
         });
 
         // observing everything because the user can switch between quick pairing and lobby
@@ -154,7 +154,7 @@ async function initializeChessBlocker() {
                                 return;
                             }
                             
-                            playButtonHandler(event, 'lichess', false, getLichessPlayerLastDayGamesTimes);
+                            playButtonHandler(event, LICHESS, false, getLichessPlayerLastDayGamesTimes);
                         }, true);
                     }
                 }
