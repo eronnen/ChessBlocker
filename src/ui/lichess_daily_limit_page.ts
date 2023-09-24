@@ -1,3 +1,4 @@
+import { LICHESS } from "../common/constants";
 import { setDailyLimitMessages } from "./daily_limit_page";
 
 document.addEventListener('DOMContentLoaded', async () => {

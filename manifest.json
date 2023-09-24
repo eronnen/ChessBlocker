@@ -48,12 +48,12 @@
             {
                 "id": "chesscom_new_game_link",
                 "enabled": true,
-                "path": "static/chesscom_new_game_link_rules.json"
+                "path": "static/config/chesscom_new_game_link_rules.json"
             },
             {
                 "id": "lichess_new_game_link",
                 "enabled": true,
-                "path": "static/lichess_new_game_link_rules.json"
+                "path": "static/config/lichess_new_game_link_rules.json"
             }
         ]
     },
@@ -63,14 +63,14 @@
         "https://*.lichess.org/#hook_like*"
     ],
 
-    "options_page": "ui/options.html",
+    "options_page": "static/ui/options.html",
     "action": {
-        "default_popup": "ui/popup.html"
+        "default_popup": "static/ui/popup.html"
     },
 
     "web_accessible_resources": [
         {
-            "resources": ["/static/*", "/ui/*"],
+            "resources": ["/static/*"],
             "matches": ["https://*.chess.com/*", "https://*.lichess.org/*"]
         },
         {

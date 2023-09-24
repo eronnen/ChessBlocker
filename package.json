@@ -2,10 +2,12 @@
   "name": "chessblocker",
   "version": "0.1.2",
   "description": "Chrome Extension to block playing in chess sites",
-  "main": "dist/background.js",
+  "private": true,
   "scripts": {
     "lint": "eslint src --ext ts",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "build": "webpack --mode=production",
+    "watch": "webpack --mode=development --watch"
   },
   "repository": {
     "type": "git",
@@ -29,10 +31,13 @@
     "@types/chrome": "^0.0.246",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
+    "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.50.0",
     "prettier": "^3.0.3",
     "ts-loader": "^9.4.4",
+    "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
-    "webpack": "^5.88.2"
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4"
   }
 }

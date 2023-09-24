@@ -1,4 +1,4 @@
-import { DEFAULT_GAMES_PER_DAY, DEFAULT_DAY_START_TIME_HOURS, DEFAULT_DAY_START_TIME_MINUTES } from "./constants";
+import { WEEK_DAYS, DEFAULT_GAMES_PER_DAY, DEFAULT_DAY_START_TIME_HOURS, DEFAULT_DAY_START_TIME_MINUTES } from "./constants";
 import { getActualWeekDayByDate } from "./date_utils";
 
 export async function waitForElementToExist(id: string | undefined, selector: string | undefined = undefined): Promise<Element> {

@@ -30,7 +30,8 @@ export async function* readLichessGamesResponseLines(response: Response): AsyncG
 export async function getLichessGamesCount(username: string, fromDate: Date, maxGames: number = 0) {
     return getLichessGames(username, fromDate, maxGames).then(async (response) => {
         let numberOfGames = 0; 
-        for await (_ of readLichessGamesResponseLines(response)) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for await (const _ of readLichessGamesResponseLines(response)) {
             //assume every line is a game without parsing...
             numberOfGames++;
         }

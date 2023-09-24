@@ -1,16 +1,8 @@
-declare const WEEK_DAYS: readonly ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-declare type WeekDayType = (typeof WEEK_DAYS)[number];
-declare type WeekDayIndexType = keyof typeof WEEK_DAYS;
+declare type WeekDayType = "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday" | "Sunday";
+declare type WeekDayIndexType = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-declare const CHESSCOM = "chesscom";
-declare const LICHESS = "lichess";
-declare const CHESS_WEBSITES: readonly [typeof CHESSCOM, typeof LICHESS];
-declare type ChessWebsiteType = (typeof CHESS_WEBSITES)[number];
-
-declare const LIMIT_BY_DAY = "day";
-declare const LIMIT_BY_DAY_OF_WEEK = "dayOfWeek";
-declare const LIMIT_TYPES: readonly [typeof LIMIT_BY_DAY, typeof LIMIT_BY_DAY_OF_WEEK];
-declare type LimitType = (typeof LIMIT_TYPES)[number];
+declare type ChessWebsiteType = "chesscom" | "lichess";
+declare type LimitType = "day" | "dayOfWeek";
 
 declare type ChessBlockerSiteConfigType = {
     username?: string;
@@ -22,8 +14,8 @@ declare type ChessBlockerSiteConfigType = {
 declare type ChessBlockerConfigType = {
     dayStartTimeHours?: number;
     dayStartTimeMinutes?: number;
-    [CHESSCOM]?: ChessBlockerSiteConfigType;
-    [LICHESS]?: ChessBlockerSiteConfigType;
+    chesscom?: ChessBlockerSiteConfigType;
+    lichess?: ChessBlockerSiteConfigType;
 };
 
 declare type ChessBlockerEvent = MouseEvent & {
