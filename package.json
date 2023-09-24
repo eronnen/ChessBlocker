@@ -1,0 +1,30 @@
+{
+  "name": "chessblocker",
+  "version": "0.1.2",
+  "description": "Chrome Extension to block playing in chess sites",
+  "main": "dist/background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eronnen/ChessBlocker.git"
+  },
+  "keywords": [
+    "chess",
+    "blocker",
+    "chessblocker",
+    "productivity",
+    "chrome-extension",
+    "focus"
+  ],
+  "author": "Ely Ronnen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eronnen/ChessBlocker/issues"
+  },
+  "homepage": "https://github.com/eronnen/ChessBlocker#readme",
+  "devDependencies": {
+    "webpack": "^5.88.2"
+  }
+}
