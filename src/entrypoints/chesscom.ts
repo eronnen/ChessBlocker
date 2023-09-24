@@ -1,13 +1,17 @@
+import { getChesscomMonthGames } from "../common/chesscom_api";
+import { getLast2DaysEpochMillis } from "../common/date_utils";
+import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_site_hook";
+
 // since we cache the result, we retrieve the previous 2 days in case date start changes in the settings.
 // also chess.com supports getting only the last month, so we retrieve the past 2 days anyway (except in a month start)
 
-let g_last2DaysGamesTimesPromise = null;
+let g_last2DaysGamesTimesPromise: Promise<number[]> | undefined = undefined;
 
-async function getPlayerLast2DaysGamesTimes(username, delayMs = 0) {
+async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Promise<number[]> {
     // TODO: update if chess.com supports smaller units then month
     
     if (!username) {
-        console.debug('ChessBlocker: no chess.com username configured');
+        console.warn('ChessBlocker: no chess.com username configured');
         return [];
     }
     
@@ -26,11 +30,11 @@ async function getPlayerLast2DaysGamesTimes(username, delayMs = 0) {
     if (!responseJson["games"]) {
         return []
     }
-    return responseJson["games"].filter((g) => g['end_time'] >= last2DaysEpoch).map((g) => g['end_time'] * 1000);
+    return responseJson["games"].filter((g: object) => g['end_time'] >= last2DaysEpoch).map((g: object) => g['end_time'] * 1000);
 }
 
 let g_chessComUsernamePromise = chrome.storage.sync.get({
-    chesscom_username: ''
+    [CHESSCOM]: { username: ''},
 });
 
 function getLast2DaysGamesTimesPromise(delayMs = 0) {
@@ -43,24 +47,24 @@ function reinitializeChessBlockerData(delayMs = 0) {
     g_last2DaysGamesTimesPromise = getLast2DaysGamesTimesPromise(delayMs);
 }
 
-async function getLast2DaysGamesTimesPromiseGlobal(items) {
+async function getLast2DaysGamesTimesPromiseGlobal(items: ChessBlockerConfigType): Promise<number[]> {
     // Using a global so we can update the value before needed in button, since 
     // chess.com API can be very slow because we need to query a whole month
-    return g_last2DaysGamesTimesPromise;
+    return g_last2DaysGamesTimesPromise!;
 }
 
-async function waitForSideBarAndAddListener() {
+async function waitForSideBarAndAddListener(): Promise<Element> {
     const sideBarElement = await waitForElementToExist("board-layout-sidebar");
     if (!sideBarElement) {
         throw new Error('ChessBlocker: Didnt find sidebar on live game');
     }
 
-    sideBarElement.addEventListener('click', (event) => {
+    sideBarElement.addEventListener('click', (event: Event) => {
         if (!(event.target instanceof Element)) {
             return;
         }
 
-        let closestButton = event.target.closest('button');
+        let closestButton: HTMLElement | null = event.target.closest('button');
         if (closestButton == null) {
             closestButton = event.target.closest('a');
             if (closestButton == null) {
@@ -70,14 +74,18 @@ async function waitForSideBarAndAddListener() {
         }
 
         const buttonText = closestButton.textContent;
+        if (buttonText == null) {
+            return;
+        }
+
         if (buttonText.match(/^\s*New (\d+) min\s*$/)) {
-            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
+            playButtonHandler(event as ChessBlockerEvent, CHESSCOM, false, getLast2DaysGamesTimesPromiseGlobal);
         }
         else if (buttonText.match(/^\s*Play\s*$/)) {
-            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
+            playButtonHandler(event as ChessBlockerEvent, CHESSCOM, false, getLast2DaysGamesTimesPromiseGlobal);
         }
         else if (buttonText.match(/^\s*New (\d+) min rated\s*$/)) {
-            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
+            playButtonHandler(event as ChessBlockerEvent, CHESSCOM, false, getLast2DaysGamesTimesPromiseGlobal);
         }
     }, true);
 
@@ -89,9 +97,9 @@ async function initializeChessBlocker() {
     if (pagePath == '/home') {
         // home: only "Play x min" link
         reinitializeChessBlockerData();
-        await waitForElementToExist(null, '.play-quick-links-title');
+        await waitForElementToExist(undefined, '.play-quick-links-title');
         if (!addPlayButtonHandlerWithPattern(document, "a", /^\s*Play (\d+) min\s*$/, (event) => {
-            playButtonHandler(event, "chesscom", true, getLast2DaysGamesTimesPromiseGlobal);
+            playButtonHandler(event, CHESSCOM, true, getLast2DaysGamesTimesPromiseGlobal);
         })) {
             console.error("ChessBlocker: Didn't find play button in home page");
         }
@@ -137,8 +145,8 @@ async function initializeChessBlocker() {
         // old live link - "Play" button on sidebar and "New x min" link in the chat on button
         console.debug('live');
         reinitializeChessBlockerData();
-        const sideBarElement = await waitForSideBarAndAddListener();
-        const boardLayoutElement = document.getElementById('board-layout-chessboard');
+        await waitForSideBarAndAddListener();
+        const boardLayoutElement = document.getElementById('board-layout-chessboard')!;
         const gameDialogObserver = new MutationObserver((mutationList, observer) => {
             for (const mutation of mutationList) {
                 if (mutation.type != "childList") {
@@ -153,7 +161,7 @@ async function initializeChessBlocker() {
                         // wait for chess.com to update last game data hopefully. TODO: remove delay?
                         reinitializeChessBlockerData(1500);
                         if (!addPlayButtonHandlerWithPattern(addedNode, "button", /^\s*New (\d+) min\s*$/), (event) => {
-                            playButtonHandler(event, "chesscom", false, getLast2DaysGamesTimesPromiseGlobal);
+                            playButtonHandler(event, CHESSCOM, false, getLast2DaysGamesTimesPromiseGlobal);
                         }) {
                             console.error("ChessBlocker: Didn't find play button in game over dialog");
                         }

@@ -6,16 +6,16 @@
     "author": "Ely Ronnen",
     "description": "Limit daily chess games on Chess.com and Lichess",
     "icons": {
-        "16": "images/ChessBlocker16.png",
-        "32": "images/ChessBlocker32.png",
-        "48": "images/ChessBlocker48.png",
-        "128": "images/ChessBlocker128.png"
+        "16": "static/images/ChessBlocker16.png",
+        "32": "static/images/ChessBlocker32.png",
+        "48": "static/images/ChessBlocker48.png",
+        "128": "static/images/ChessBlocker128.png"
     },
 
     "content_scripts": [
         {
             "all_frames": true,
-            "js": ["scripts/utils.js", "scripts/chesscom.js"],
+            "js": ["scripts/chesscom.js"],
             "matches": [
                 "https://*.chess.com/home",
                 "https://*.chess.com/play/online/*",
@@ -26,7 +26,7 @@
         },
         {
             "all_frames": true,
-            "js": ["scripts/utils.js", "scripts/lichess.js"],
+            "js": ["scripts/lichess.js"],
             "matches": [
                 "https://*.lichess.org/*"
             ],
@@ -63,18 +63,18 @@
         "https://*.lichess.org/#hook_like*"
     ],
 
-    "options_page": "pages/options.html",
+    "options_page": "ui/options.html",
     "action": {
-        "default_popup": "pages/popup.html"
+        "default_popup": "ui/popup.html"
     },
 
     "web_accessible_resources": [
         {
-            "resources": ["/images/*", "/static/*", "/pages/*"],
+            "resources": ["/static/*", "/ui/*"],
             "matches": ["https://*.chess.com/*", "https://*.lichess.org/*"]
         },
         {
-            "resources": ["/images/*", "/static/*"],
+            "resources": ["/static/*"],
             "matches": ["<all_urls>"]
         }
     ]

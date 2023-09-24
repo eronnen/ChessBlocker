@@ -1,0 +1,3 @@
+export const DEFAULT_GAMES_PER_DAY = 10;
+export const DEFAULT_DAY_START_TIME_HOURS = 3;
+export const DEFAULT_DAY_START_TIME_MINUTES = 30;
