@@ -45,7 +45,7 @@ async function restoreOptions() {
     
     g_oldUsernames[CHESSCOM] = items[CHESSCOM]!.username!;
     g_oldUsernames[LICHESS] = items[LICHESS]!.username!;
-    (document.getElementById('dayStartTime') as HTMLInputElement)!.value = `${items.dayStartTimeHours!.toString().padStart(2)}:${items.dayStartTimeMinutes!.toString().padStart(2)}`;
+    (document.getElementById('dayStartTime') as HTMLInputElement)!.value = `${items.dayStartTimeHours!.toString().padStart(2,'0')}:${items.dayStartTimeMinutes!.toString().padStart(2,'0')}`;
 
     for (const website of CHESS_WEBSITES) {
         (document.getElementById(website + '.username') as HTMLInputElement)!.value = items[website]!.username!;
@@ -64,12 +64,12 @@ async function saveOptions() {
 
     for (const website of CHESS_WEBSITES) {
         let username = (document.getElementById(website + '.username')! as HTMLInputElement).value;
-        const limitByWeekDay = (document.getElementById(website + '.limitByWeekDay') as HTMLInputElement)!.value == 'dayOfWeek';
+        const limitType = (document.getElementById(website + '.limitType') as HTMLInputElement)!.value as LimitType;
         const gamesPerDay = Object.fromEntries(Array.from(
             { length: WEEK_DAYS.length }, 
             (_, i) => [i, parseInt((document.getElementById(website + '.gamesPerDay.' + WEEK_DAYS[i]) as HTMLInputElement)!.value)]));
         
-        if (!limitByWeekDay) {
+        if (limitType == LIMIT_BY_DAY) {
             for (let i = 0; i < WEEK_DAYS.length; i++) {
                 gamesPerDay[i] = parseInt((document.getElementById(website + '.gamesPerDay.' + WEEK_DAYS[0]) as HTMLInputElement)!.value);
             }
@@ -90,7 +90,7 @@ async function saveOptions() {
             dayStartTimeMinutes: dayStartTimeMinutes,
             [website]: {
                 username: username,
-                limitType: limitByWeekDay ? LIMIT_BY_DAY_OF_WEEK : LIMIT_BY_DAY,
+                limitType: limitType,
                 gamesPerDay: gamesPerDay,
             }
         };
@@ -108,7 +108,7 @@ async function saveOptions() {
 
 document.addEventListener('DOMContentLoaded', () => {
     for (const website of CHESS_WEBSITES) {
-        document.getElementById(website + '.limitByWeekDay')!.addEventListener('change', (event: Event) => { 
+        document.getElementById(website + '.limitType')!.addEventListener('change', (event: Event) => { 
             restoreDayLimits(website, (event.target! as HTMLSelectElement).value as LimitType); 
         });
     }

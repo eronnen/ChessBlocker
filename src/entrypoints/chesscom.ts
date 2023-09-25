@@ -1,6 +1,6 @@
 import { CHESSCOM } from "../common/constants";
-import { getChesscomMonthGames } from "../common/chesscom_api";
-import { getLast2DaysEpochMillis } from "../common/date_utils";
+import { getChesscomMonthGames, filterChesscomGamesByDate } from "../common/chesscom_api";
+import { getLast2DaysDate } from "../common/date_utils";
 import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_site_hook";
 
 // since we cache the result, we retrieve the previous 2 days in case date start changes in the settings.
@@ -20,20 +20,15 @@ async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Prom
     
     // TODO: solve edge case in the first day of a month and retrieve for previous month too
     const removeLoadingAnimation = addLoadingAnimation();
-    await new Promise(resolve => setTimeout(resolve, delayMs));
+    await new Promise(resolve => setTimeout(resolve, delayMs)); // because it takes time for chess.com to update last game data
     console.debug('ChessBlocker: fetching chess.com games for ' + username);
     const response = await getChesscomMonthGames(username, currentDate);
     console.debug('ChessBlocker: done fetching');
     const responseJson = await response.json();
     removeLoadingAnimation();
     
-    const last2DaysEpoch = getLast2DaysEpochMillis(currentDate) / 1000;
-    if (!responseJson["games"]) {
-        return []
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return responseJson["games"].filter((g: any) => g["end_time"] >= last2DaysEpoch).map((g: any) => g["end_time"] * 1000);
+    const last2DaysDate = getLast2DaysDate(currentDate);
+    return filterChesscomGamesByDate(responseJson, last2DaysDate);
 }
 
 const g_chessComUsernamePromise = chrome.storage.sync.get({

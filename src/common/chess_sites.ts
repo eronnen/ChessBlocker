@@ -1,5 +1,5 @@
 import { getLichessGamesCount, isLichessUsernameValid } from "./lichess_api";
-import { isChesscomUsernameValid } from "./chesscom_api";
+import { getChesscomGamesCount, isChesscomUsernameValid } from "./chesscom_api";
 import { CHESSCOM, LICHESS } from "./constants";
 
 export async function getSiteGamesCount(site: ChessWebsiteType, username: string, fromDate: Date, maxGames: number = 0): Promise<number> {
@@ -7,7 +7,7 @@ export async function getSiteGamesCount(site: ChessWebsiteType, username: string
         case LICHESS:
             return getLichessGamesCount(username, fromDate, maxGames);
         case CHESSCOM:
-            throw new Error("getSiteGamesCount for chess.com is not implemented yet. Their API sucks");
+            return getChesscomGamesCount(username, fromDate);
         default:
             throw new Error(`Unknown site: ${site}`);
     }

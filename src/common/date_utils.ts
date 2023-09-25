@@ -1,10 +1,10 @@
-export function getLast2DaysEpochMillis(date: Date) {
+export function getLast2DaysDate(date: Date) {
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
     date.setMilliseconds(0);
     date.setDate(date.getDate() - 1);
-    return date.getTime();
+    return date;
 }
 
 export function getDayStart(date: Date, dayStartTimeHours: number, dayStartTimeMinutes: number) {
