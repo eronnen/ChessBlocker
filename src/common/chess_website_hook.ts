@@ -80,7 +80,6 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
 
     try {
         chessBlockerOptions = await chrome.storage.sync.get(config);
-        console.debug("fuck items", chessBlockerOptions);
         previousGamesTimes = await getPreviousGamesTimesPromise(chessBlockerOptions);
     } catch (err) {
         console.error(`ChessBlocker error: ${err}`);
@@ -128,7 +127,7 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
 export function addPlayButtonHandlerWithPattern(parent: HTMLElement, tag: string, buttonPattern: RegExp, handler: (event: ChessBlockerEvent) => void) {
     for (const e of parent.querySelectorAll(tag)) {
         if (e instanceof Element && e.textContent && e.textContent.match(buttonPattern)) {
-            console.debug(`ChessBlocker: hooking ${e.textContent} button`);
+            console.debug(`ChessBlocker: hooking button `, e);
             (e as HTMLElement).addEventListener('click', handler, true);
             return true;
         }

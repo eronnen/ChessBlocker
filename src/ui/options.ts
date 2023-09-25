@@ -68,8 +68,6 @@ async function saveOptions() {
                 gamesPerDay[i] = parseInt((document.getElementById(website + '.gamesPerDay') as HTMLInputElement)!.value);
             }
         }
-
-        console.log(`fuck ${website}: `, gamesPerDay);
         
         if (g_oldUsernames[website] != username) {
             if (!await isUsernameValid(website, username)) {
