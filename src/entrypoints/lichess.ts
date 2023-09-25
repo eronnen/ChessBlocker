@@ -1,12 +1,12 @@
 import { LICHESS } from '../common/constants';
-import { addLoadingAnimation, waitForElementToExist, playButtonHandler } from '../common/chess_site_hook';
+import { addLoadingAnimation, waitForElementToExist, playButtonHandler } from '../common/chess_website_hook';
 import { getDayStart, getActualWeekDayByDate } from '../common/date_utils';
 import { getLichessGames, readLichessGamesResponseLines } from '../common/lichess_api';
 
 // getting games only for last days, since we don't cache values in lichess
 
 async function getLichessPlayerLastDayGamesTimes(items: ChessBlockerConfigType): Promise<number[]> {
-    const username = items[LICHESS]!.username;
+    const username = items[LICHESS + ".username" as UsernameConfigType]!;
     if (!username) {
         console.debug('ChessBlocker: no lichess.org username configured');
         return [];
@@ -15,7 +15,7 @@ async function getLichessPlayerLastDayGamesTimes(items: ChessBlockerConfigType):
     const removeLoadingAnimation = addLoadingAnimation();
 
     const currentDate = new Date();
-    const gamesLimitPerToday = items[LICHESS]!.gamesPerDay![getActualWeekDayByDate(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!)];
+    const gamesLimitPerToday = items[LICHESS + ".gamesPerDay" as GamesPerDayConfigType]![getActualWeekDayByDate(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!)];
     const dayStartDate = getDayStart(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!);
     
     console.debug('ChessBlocker: fetching lichess.org games for ' + username);

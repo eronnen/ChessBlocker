@@ -11,12 +11,23 @@ declare type ChessBlockerSiteConfigType = {
     gamesPlayedToday?: number;
 };
 
-declare type ChessBlockerConfigType = {
+declare type UsernameConfigType = `${ChessWebsiteType}.username`;
+declare type LimitTypeConfigType = `${ChessWebsiteType}.limitType`;
+declare type GamesPerDayConfigType = `${ChessWebsiteType}.gamesPerDay`;
+declare type GamesPlayedTodayConfigType = `${ChessWebsiteType}.gamesPlayedToday`;
+
+declare type ChessBlockerGeneralConfigType = {
     dayStartTimeHours?: number;
     dayStartTimeMinutes?: number;
-    chesscom?: ChessBlockerSiteConfigType;
-    lichess?: ChessBlockerSiteConfigType;
 };
+
+// config is flat and not nested for every website in order to be able to set single values in chrome.storage.sync without overriding the whole config
+declare type ChessBlockerConfigType = 
+    ChessBlockerGeneralConfigType
+    & { [K in UsernameConfigType]?: string }
+    & { [K in LimitTypeConfigType]?: LimitType }
+    & { [K in GamesPerDayConfigType]?: { [id: number]: number } }
+    & { [K in GamesPlayedTodayConfigType]?: number };
 
 declare type ChessBlockerEvent = MouseEvent & {
     created_by_chess_blocker?: boolean;

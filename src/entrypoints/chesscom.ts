@@ -1,7 +1,7 @@
 import { CHESSCOM } from "../common/constants";
 import { getChesscomMonthGames, filterChesscomGamesByDate } from "../common/chesscom_api";
 import { getLast2DaysDate } from "../common/date_utils";
-import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_site_hook";
+import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_website_hook";
 
 // since we cache the result, we retrieve the previous 2 days in case date start changes in the settings.
 // also chess.com supports getting only the last month, so we retrieve the past 2 days anyway (except in a month start)
@@ -32,7 +32,7 @@ async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Prom
 }
 
 const g_chessComUsernamePromise = chrome.storage.sync.get({
-    [CHESSCOM]: { username: ''},
+    [CHESSCOM + ".username"]: '',
 });
 
 function getLast2DaysGamesTimesPromise(delayMs = 0) {
