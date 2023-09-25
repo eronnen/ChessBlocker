@@ -71,10 +71,8 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
     const config: ChessBlockerConfigType =  {
         dayStartTimeHours: DEFAULT_DAY_START_TIME_HOURS,
         dayStartTimeMinutes: DEFAULT_DAY_START_TIME_MINUTES,
-        [website]: {
-            username: '',
-            gamesPerDay: Object.fromEntries(Array.from({ length: WEEK_DAYS.length }, (_, i) => [i, DEFAULT_GAMES_PER_DAY])),
-        }
+        [website + ".username"]: '',
+        [website + ".gamesPerDay"]: Object.fromEntries(Array.from({ length: WEEK_DAYS.length }, (_, i) => [i, DEFAULT_GAMES_PER_DAY])),
     }
 
     let chessBlockerOptions: ChessBlockerConfigType;
@@ -104,13 +102,16 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
     }
     
     const dayStartEpochMillis = dayStart.getTime();
-    const gamesLimitPerToday = chessBlockerOptions[website]!.gamesPerDay![getActualWeekDayByDate(currentDate, chessBlockerOptions.dayStartTimeHours!, chessBlockerOptions.dayStartTimeMinutes!)];
+    const gamesLimitPerToday = chessBlockerOptions[(website + ".gamesPerDay") as GamesPerDayConfigType]![getActualWeekDayByDate(currentDate, chessBlockerOptions.dayStartTimeHours!, chessBlockerOptions.dayStartTimeMinutes!)];
 
     const numberOfGamesPlayed = previousGamesTimes.filter((t) => t > dayStartEpochMillis).length;
     if (numberOfGamesPlayed >= gamesLimitPerToday) {
         // limit reached
         console.debug(`you reached your daily games limit! you played ${numberOfGamesPlayed}/${gamesLimitPerToday} games`);
-        await chrome.storage.sync.set({ [website]: { gamesPlayedToday: numberOfGamesPlayed } });
+        const setConfig: ChessBlockerConfigType = {
+            [(website + ".gamesPlayedToday") as GamesPlayedTodayConfigType]: numberOfGamesPlayed
+        };
+        await chrome.storage.sync.set(setConfig);
         chrome.runtime.sendMessage(chrome.runtime.id, {
             type: 'limit',
             website: website,
@@ -126,7 +127,7 @@ export async function playButtonHandler(event: ChessBlockerEvent, website: Chess
 export function addPlayButtonHandlerWithPattern(parent: HTMLElement, tag: string, buttonPattern: RegExp, handler: (event: ChessBlockerEvent) => void) {
     for (const e of parent.querySelectorAll(tag)) {
         if (e instanceof Element && e.textContent && e.textContent.match(buttonPattern)) {
-            console.debug(`ChessBlocker: hooking ${e.textContent} button`);
+            console.debug(`ChessBlocker: hooking button `, e);
             (e as HTMLElement).addEventListener('click', handler, true);
             return true;
         }

@@ -7,14 +7,15 @@ export function filterChesscomGamesByDate(responseJson: any, startDate: Date) {
         return [];
     }
 
-    return responseJson["games"].filter((g: any) => g["end_time"] >= startDate.getTime()).map((g: any) => g["end_time"] * 1000);
+    return responseJson["games"].filter((g: any) => g["end_time"] * 1000 >= startDate.getTime()).map((g: any) => g["end_time"] * 1000);
 }
 
 export async function getChesscomGamesCount(username: string, fromDate: Date) {
     console.debug('ChessBlocker: fetching chess.com games for ' + username);
     const response = await getChesscomMonthGames(username, fromDate);
+    const responseJson = await response.json();
     console.debug('ChessBlocker: done fetching');
-    return filterChesscomGamesByDate(response, fromDate).length;
+    return filterChesscomGamesByDate(responseJson, fromDate).length;
 }
 
 export async function isChesscomUsernameValid(username: string): Promise<boolean> {

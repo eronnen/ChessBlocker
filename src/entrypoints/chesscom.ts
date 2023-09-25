@@ -1,14 +1,14 @@
 import { CHESSCOM } from "../common/constants";
 import { getChesscomMonthGames, filterChesscomGamesByDate } from "../common/chesscom_api";
 import { getLast2DaysDate } from "../common/date_utils";
-import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_site_hook";
+import { addLoadingAnimation, waitForElementToExist, playButtonHandler, addPlayButtonHandlerWithPattern } from "../common/chess_website_hook";
 
 // since we cache the result, we retrieve the previous 2 days in case date start changes in the settings.
 // also chess.com supports getting only the last month, so we retrieve the past 2 days anyway (except in a month start)
 
 let g_last2DaysGamesTimesPromise: Promise<number[]> | undefined = undefined;
 
-async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Promise<number[]> {
+async function getPlayerLast2DaysGamesTimes(username: string | undefined, delayMs = 0): Promise<number[]> {
     // TODO: update if chess.com supports smaller units then month
     
     if (!username) {
@@ -31,18 +31,17 @@ async function getPlayerLast2DaysGamesTimes(username: string, delayMs = 0): Prom
     return filterChesscomGamesByDate(responseJson, last2DaysDate);
 }
 
-const g_chessComUsernamePromise = chrome.storage.sync.get({
-    [CHESSCOM]: { username: ''},
-});
+async function getLast2DaysGamesTimes(delayMs = 0): Promise<number[]> {
+    const config: ChessBlockerConfigType =  {
+        [CHESSCOM + ".username"]: '',
+    }
 
-function getLast2DaysGamesTimesPromise(delayMs = 0) {
-    return g_chessComUsernamePromise.then(
-        (items) => getPlayerLast2DaysGamesTimes(items.chesscom_username, delayMs)
-    );
+    const items: ChessBlockerConfigType = await chrome.storage.sync.get(config);
+    return getPlayerLast2DaysGamesTimes(items[CHESSCOM + ".username" as UsernameConfigType], delayMs)
 }
 
 function reinitializeChessBlockerData(delayMs = 0) {
-    g_last2DaysGamesTimesPromise = getLast2DaysGamesTimesPromise(delayMs);
+    g_last2DaysGamesTimesPromise = getLast2DaysGamesTimes(delayMs);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
