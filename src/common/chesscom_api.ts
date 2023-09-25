@@ -15,11 +15,13 @@ export function filterChesscomGamesByDate(responseJson: any, startDate: Date) {
     return [];
   }
 
-  return responseJson["games"]
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .filter((g: any) => g["end_time"] * 1000 >= startDate.getTime())
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .map((g: any) => g["end_time"] * 1000);
+  return (
+    responseJson["games"]
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((g: any) => g["end_time"] * 1000 >= startDate.getTime())
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .map((g: any) => g["end_time"] * 1000)
+  );
 }
 
 export async function getChesscomGamesCount(username: string, fromDate: Date) {

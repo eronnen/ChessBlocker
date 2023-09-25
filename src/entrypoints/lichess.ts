@@ -188,7 +188,7 @@ async function initializeChessBlocker() {
             continue;
           }
 
-          if (addedNode.id == "modal-overlay") {
+          if (addedNode.tagName == "DIALOG") {
             // opened a "Create A Game dialog"
 
             const submitTray = addedNode.querySelector(
