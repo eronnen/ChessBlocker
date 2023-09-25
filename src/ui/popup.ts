@@ -1,6 +1,6 @@
 import { CHESSCOM, LICHESS, DEFAULT_DAY_START_TIME_HOURS, DEFAULT_DAY_START_TIME_MINUTES } from "../common/constants";
 import { getDayStart } from "../common/date_utils";
-import { getChesscomMonthGames } from "../common/chesscom_api";
+import { getChesscomGamesCount } from "../common/chesscom_api";
 import { getLichessGamesCount } from "../common/lichess_api";
 
 document.getElementById('settingsButton')!.addEventListener('click', () => {
@@ -8,7 +8,7 @@ document.getElementById('settingsButton')!.addEventListener('click', () => {
 });
 
 async function updateTodayGames() {
-    const items: ChessBlockerConfigType = await chrome.storage.sync.get({
+    const config: ChessBlockerConfigType = {
         dayStartTimeHours: DEFAULT_DAY_START_TIME_HOURS,
         dayStartTimeMinutes: DEFAULT_DAY_START_TIME_MINUTES,
         [CHESSCOM]: {
@@ -17,8 +17,9 @@ async function updateTodayGames() {
         [LICHESS]: {
             username: '',
         },
-    });
+    }
 
+    const items: ChessBlockerConfigType = await chrome.storage.sync.get(config);
     const currentDate = new Date();
     const dayStart = getDayStart(currentDate, items.dayStartTimeHours!, items.dayStartTimeMinutes!);
 
@@ -26,19 +27,12 @@ async function updateTodayGames() {
     if (items[CHESSCOM]!.username) {
         const chesscomGamesElement = document.getElementById('chesscom.games')!;
         chesscomGamesElement.innerHTML = '<div class="loader"></div>&nbsp;Games';
-        getChesscomMonthGames(items[CHESSCOM]!.username!, dayStart)
-            .then((response) => response.json())
-            .then((responseJson) => {
-                let numberOfGames = 0;
-                if (responseJson['games']) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    numberOfGames = (responseJson["games"].filter((g: any) => g['end_time'] * 1000 > dayStart.getDate())).length; 
-                }
-                chesscomGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
-            })
-            .catch(() => {
-                chesscomGamesElement.innerHTML = '<span style="font-weight: bold;">(Error)</span>';
-            });
+        try {
+            const numberOfGames = await getChesscomGamesCount(items[CHESSCOM]!.username!, dayStart);
+            chesscomGamesElement.innerHTML = `<span style="font-weight: bold;">${numberOfGames}</span> Games`;
+        } catch (err) {
+            chesscomGamesElement.innerHTML = '<span style="font-weight: bold;">(Error)</span>';
+        }
     }
 
     if (items[LICHESS]!.username) {
