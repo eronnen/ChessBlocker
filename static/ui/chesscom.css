@@ -1,14 +1,14 @@
 :root {
-    --ChesscomBackground: rgb(74, 139, 74);
+  --ChesscomBackground: rgb(74, 139, 74);
 }
 
 h1 {
-    font-size: 48px;
-    background-color: var(--ChesscomBackground);
+  font-size: 48px;
+  background-color: var(--ChesscomBackground);
 }
 h2 {
-    font-size: 28px;
+  font-size: 28px;
 }
 h3 {
-    font-size: 22px;
+  font-size: 22px;
 }

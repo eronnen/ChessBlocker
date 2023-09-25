@@ -1,81 +1,79 @@
 {
-    "manifest_version": 3,
-    "name": "Chess Blocker",
-    "version": "0.2.0",
-    
-    "description": "Limit daily chess games on Chess.com and Lichess",
-    "icons": {
-        "16": "static/images/ChessBlocker16.png",
-        "32": "static/images/ChessBlocker32.png",
-        "48": "static/images/ChessBlocker48.png",
-        "128": "static/images/ChessBlocker128.png"
-    },
-    "action": {
-        "default_popup": "static/ui/popup.html"
-    },
-    "options_page": "static/ui/options.html",
-    
-    "author": "Ely Ronnen",
+  "manifest_version": 3,
+  "name": "Chess Blocker",
+  "version": "0.2.0",
 
-    "content_scripts": [
-        {
-            "all_frames": true,
-            "js": ["scripts/chesscom.js"],
-            "matches": [
-                "https://*.chess.com/home",
-                "https://*.chess.com/play/online/*",
-                "https://*.chess.com/game/live/*",
-                "https://*.chess.com/live"
-            ],
-            "run_at": "document_idle"
-        },
-        {
-            "all_frames": true,
-            "js": ["scripts/lichess.js"],
-            "matches": [
-                "https://*.lichess.org/*"
-            ],
-            "run_at": "document_idle"
-        }
-    ],
+  "description": "Limit daily chess games on Chess.com and Lichess",
+  "icons": {
+    "16": "static/images/ChessBlocker16.png",
+    "32": "static/images/ChessBlocker32.png",
+    "48": "static/images/ChessBlocker48.png",
+    "128": "static/images/ChessBlocker128.png"
+  },
+  "action": {
+    "default_popup": "static/ui/popup.html"
+  },
+  "options_page": "static/ui/options.html",
 
-    "background": {
-        "service_worker": "scripts/background.js"
+  "author": "Ely Ronnen",
+
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "js": ["scripts/chesscom.js"],
+      "matches": [
+        "https://*.chess.com/home",
+        "https://*.chess.com/play/online/*",
+        "https://*.chess.com/game/live/*",
+        "https://*.chess.com/live"
+      ],
+      "run_at": "document_idle"
     },
+    {
+      "all_frames": true,
+      "js": ["scripts/lichess.js"],
+      "matches": ["https://*.lichess.org/*"],
+      "run_at": "document_idle"
+    }
+  ],
 
-    "permissions": [
-        "storage", 
-        "declarativeNetRequest",
-        "declarativeNetRequestWithHostAccess"
-    ],
-    "declarative_net_request": {
-        "rule_resources": [
-            {
-                "id": "chesscom_new_game_link",
-                "enabled": true,
-                "path": "static/config/chesscom_new_game_link_rules.json"
-            },
-            {
-                "id": "lichess_new_game_link",
-                "enabled": true,
-                "path": "static/config/lichess_new_game_link_rules.json"
-            }
-        ]
-    },
-    "host_permissions": [
-        "https://*.chess.com/play/online/new?action=createLiveChallenge*",
-        "https://*.lichess.org/#pool/*",
-        "https://*.lichess.org/#hook_like*"
-    ],
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
 
-    "web_accessible_resources": [
-        {
-            "resources": ["/static/*"],
-            "matches": ["https://*.chess.com/*", "https://*.lichess.org/*"]
-        },
-        {
-            "resources": ["/static/*"],
-            "matches": ["<all_urls>"]
-        }
+  "permissions": [
+    "storage",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "chesscom_new_game_link",
+        "enabled": true,
+        "path": "static/config/chesscom_new_game_link_rules.json"
+      },
+      {
+        "id": "lichess_new_game_link",
+        "enabled": true,
+        "path": "static/config/lichess_new_game_link_rules.json"
+      }
     ]
+  },
+  "host_permissions": [
+    "https://*.chess.com/play/online/new?action=createLiveChallenge*",
+    "https://*.lichess.org/#pool/*",
+    "https://*.lichess.org/#hook_like*"
+  ],
+
+  "web_accessible_resources": [
+    {
+      "resources": ["/static/*"],
+      "matches": ["https://*.chess.com/*", "https://*.lichess.org/*"]
+    },
+    {
+      "resources": ["/static/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

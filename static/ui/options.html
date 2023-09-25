@@ -1,242 +1,247 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <meta charset="utf-8" />
     <title>ChessBlocker Settings</title>
 
-    <link rel="stylesheet" href="chessblocker.css">
+    <link rel="stylesheet" href="chessblocker.css" />
     <style>
-        .form {
-            margin: 0 auto;
-            width: 600px;
+      .form {
+        margin: 0 auto;
+        width: 600px;
 
-            padding: 1em;
-            padding-left: 5em;
-            padding-right: 5em;
-            border: 1px solid rgb(77, 77, 77);
-            border-radius: 1em;
-        }
+        padding: 1em;
+        padding-left: 5em;
+        padding-right: 5em;
+        border: 1px solid rgb(77, 77, 77);
+        border-radius: 1em;
+      }
 
-        ul {
-            list-style: none;
-            padding: 0px;
-            margin: 0px;
-        }
+      ul {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+      }
 
-        .form li {
-            margin-top: 5px;
-        }
+      .form li {
+        margin-top: 5px;
+      }
 
-        label {
-            display: inline-block;
-            width: 200px;
-            text-align: left;
-        }
+      label {
+        display: inline-block;
+        width: 200px;
+        text-align: left;
+      }
 
-        select {
-            width: 300px;
-            box-sizing: border-box;
-            font: 1em sans-serif;
-            border: 1px solid #999;
-        }
+      select {
+        width: 300px;
+        box-sizing: border-box;
+        font: 1em sans-serif;
+        border: 1px solid #999;
+      }
 
-        input {
-            width: 300px;
-            box-sizing: border-box;
-            font: 1em sans-serif;
-            border: 1px solid #999;
-        }
+      input {
+        width: 300px;
+        box-sizing: border-box;
+        font: 1em sans-serif;
+        border: 1px solid #999;
+      }
 
-        input:focus,
-        textarea:focus {
-            border-color: #000;
-        }
+      input:focus,
+      textarea:focus {
+        border-color: #000;
+      }
 
-        textarea {
-            vertical-align: top;
-            height: 5em;
-        }
+      textarea {
+        vertical-align: top;
+        height: 5em;
+      }
 
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            border-bottom: 1px dotted black;
-        }
+      .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;
+      }
 
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 280px;
-            background-color: black;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            top: 150%;
-            left: 50%;
-            margin-left: -60px;
-            text-align: left;
-        }
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 280px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        top: 150%;
+        left: 50%;
+        margin-left: -60px;
+        text-align: left;
+      }
 
-        .tooltip .tooltiptext::after {
-            content: "";
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent black transparent;
-        }
+      .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+      }
 
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-        }
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+      }
     </style>
-</head>
+  </head>
 
-<body style="background-color: rgb(190, 190, 190); text-align: center;">
+  <body style="background-color: rgb(190, 190, 190); text-align: center">
+    <h1 style="font-size: 48px">ChessBlocker Settings</h1>
 
-<h1 style="font-size: 48px;">ChessBlocker Settings</h1>
-
-<div class="form" style="font-size: 14px;">
-    <h2 style="text-align: left;">General</h2>
-    <ul>
+    <div class="form" style="font-size: 14px">
+      <h2 style="text-align: left">General</h2>
+      <ul>
         <li>
-            <label for="dayStartTime">
-                <div class="tooltip">
-                    Day start time:
-                    <span class="tooltiptext">
-                        The starting hour of the day. <br />
-                        If specifying starting hour before 12:00 PM, then games between 00:00 AM 
-                        until that hour will count for the previous
-                        day limit (i.e Wednesday before noon -> Tuesday)
-                    </span>
-                </div>
-            </label>
-            <input type="time" id="dayStartTime" />
+          <label for="dayStartTime">
+            <div class="tooltip">
+              Day start time:
+              <span class="tooltiptext">
+                The starting hour of the day. <br />
+                If specifying starting hour before 12:00 PM, then games between
+                00:00 AM until that hour will count for the previous day limit
+                (i.e Wednesday before noon -> Tuesday)
+              </span>
+            </div>
+          </label>
+          <input type="time" id="dayStartTime" />
         </li>
-    </ul>
-    <h2 style="text-align: left;"><a href="https://chess.com" target="_blank">Chess.com</a></h2>
-    <ul>
+      </ul>
+      <h2 style="text-align: left">
+        <a href="https://chess.com" target="_blank">Chess.com</a>
+      </h2>
+      <ul>
         <li>
-            <label for="chesscom.username">
-                <div class="tooltip">
-                    Username:
-                    <span class="tooltiptext">
-                        Chess.com username. <br />
-                        must exist on the website.
-                    </span>
-                </div>
-            </label>
-            <input type="text" id="chesscom.username" />
+          <label for="chesscom.username">
+            <div class="tooltip">
+              Username:
+              <span class="tooltiptext">
+                Chess.com username. <br />
+                must exist on the website.
+              </span>
+            </div>
+          </label>
+          <input type="text" id="chesscom.username" />
         </li>
         <li>
-            <label for="chesscom.limitType">Limit games by:</label>
-            <select id="chesscom.limitType">
-                <option value="day">Day</option>
-                <option value="dayOfWeek">Day of week</option>
-            </select>
+          <label for="chesscom.limitType">Limit games by:</label>
+          <select id="chesscom.limitType">
+            <option value="day">Day</option>
+            <option value="dayOfWeek">Day of week</option>
+          </select>
         </li>
         <li id="li.chesscom.gamesPerDay">
-            <label for="chesscom.gamesPerDay">Games per day:</label>
-            <input type="number" id="chesscom.gamesPerDay" min="1" />
+          <label for="chesscom.gamesPerDay">Games per day:</label>
+          <input type="number" id="chesscom.gamesPerDay" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Monday" hidden>
-            <label for="chesscom.gamesPerDay.Monday">Games per Monday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Monday" min="1" />
+          <label for="chesscom.gamesPerDay.Monday">Games per Monday:</label>
+          <input type="number" id="chesscom.gamesPerDay.Monday" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Tuesday" hidden>
-            <label for="chesscom.gamesPerDay.Tuesday">Games per Tuesday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Tuesday" min="1" />
+          <label for="chesscom.gamesPerDay.Tuesday">Games per Tuesday:</label>
+          <input type="number" id="chesscom.gamesPerDay.Tuesday" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Wednesday" hidden>
-            <label for="chesscom.gamesPerDay.Wednesday">Games per Wednesday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Wednesday" min="1" />
+          <label for="chesscom.gamesPerDay.Wednesday"
+            >Games per Wednesday:</label
+          >
+          <input type="number" id="chesscom.gamesPerDay.Wednesday" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Thursday" hidden>
-            <label for="chesscom.gamesPerDay.Thursday">Games per Thursday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Thursday" min="1" />
+          <label for="chesscom.gamesPerDay.Thursday">Games per Thursday:</label>
+          <input type="number" id="chesscom.gamesPerDay.Thursday" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Friday" hidden>
-            <label for="chesscom.gamesPerDay.Friday">Games per Friday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Friday" min="1" />
+          <label for="chesscom.gamesPerDay.Friday">Games per Friday:</label>
+          <input type="number" id="chesscom.gamesPerDay.Friday" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Saturday" hidden>
-            <label for="chesscom.gamesPerDay.Saturday">Games per Saturday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Saturday" min="1" />
+          <label for="chesscom.gamesPerDay.Saturday">Games per Saturday:</label>
+          <input type="number" id="chesscom.gamesPerDay.Saturday" min="1" />
         </li>
         <li id="li.chesscom.gamesPerDay.Sunday" hidden>
-            <label for="chesscom.gamesPerDay.Sunday">Games per Sunday:</label>
-            <input type="number" id="chesscom.gamesPerDay.Sunday" min="1" />
+          <label for="chesscom.gamesPerDay.Sunday">Games per Sunday:</label>
+          <input type="number" id="chesscom.gamesPerDay.Sunday" min="1" />
         </li>
-    </ul>
-    <!-- TODO: avoid code duplication? -->
-    <h2 style="text-align: left;"><a href="https://lichess.org" target="_blank">Lichess</a></h2>
-    <ul>
+      </ul>
+      <!-- TODO: avoid code duplication? -->
+      <h2 style="text-align: left">
+        <a href="https://lichess.org" target="_blank">Lichess</a>
+      </h2>
+      <ul>
         <li>
-            <label for="lichess.username">
-                <div class="tooltip">
-                    Username:
-                    <span class="tooltiptext">
-                        Lichess username. <br />
-                        must exist on the website.
-                    </span>
-                </div>
-            </label>
-            <input type="text" id="lichess.username" />
+          <label for="lichess.username">
+            <div class="tooltip">
+              Username:
+              <span class="tooltiptext">
+                Lichess username. <br />
+                must exist on the website.
+              </span>
+            </div>
+          </label>
+          <input type="text" id="lichess.username" />
         </li>
         <li>
-            <label for="lichess.limitType">Limit games by:</label>
-            <select id="lichess.limitType">
-                <option value="day">Day</option>
-                <option value="dayOfWeek">Day of week</option>
-            </select>
+          <label for="lichess.limitType">Limit games by:</label>
+          <select id="lichess.limitType">
+            <option value="day">Day</option>
+            <option value="dayOfWeek">Day of week</option>
+          </select>
         </li>
         <li id="li.lichess.gamesPerDay">
-            <label for="lichess.gamesPerDay">Games per day:</label>
-            <input type="number" id="lichess.gamesPerDay" min="1" />
+          <label for="lichess.gamesPerDay">Games per day:</label>
+          <input type="number" id="lichess.gamesPerDay" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Monday" hidden>
-            <label for="lichess.gamesPerDay.Monday">Games per Monday:</label>
-            <input type="number" id="lichess.gamesPerDay.Monday" min="1" />
+          <label for="lichess.gamesPerDay.Monday">Games per Monday:</label>
+          <input type="number" id="lichess.gamesPerDay.Monday" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Tuesday" hidden>
-            <label for="lichess.gamesPerDay.Tuesday">Games per Tuesday:</label>
-            <input type="number" id="lichess.gamesPerDay.Tuesday" min="1" />
+          <label for="lichess.gamesPerDay.Tuesday">Games per Tuesday:</label>
+          <input type="number" id="lichess.gamesPerDay.Tuesday" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Wednesday" hidden>
-            <label for="lichess.gamesPerDay.Wednesday">Games per Wednesday:</label>
-            <input type="number" id="lichess.gamesPerDay.Wednesday" min="1" />
+          <label for="lichess.gamesPerDay.Wednesday"
+            >Games per Wednesday:</label
+          >
+          <input type="number" id="lichess.gamesPerDay.Wednesday" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Thursday" hidden>
-            <label for="lichess.gamesPerDay.Thursday">Games per Thursday:</label>
-            <input type="number" id="lichess.gamesPerDay.Thursday" min="1" />
+          <label for="lichess.gamesPerDay.Thursday">Games per Thursday:</label>
+          <input type="number" id="lichess.gamesPerDay.Thursday" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Friday" hidden>
-            <label for="lichess.gamesPerDay.Friday">Games per Friday:</label>
-            <input type="number" id="lichess.gamesPerDay.Friday" min="1" />
+          <label for="lichess.gamesPerDay.Friday">Games per Friday:</label>
+          <input type="number" id="lichess.gamesPerDay.Friday" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Saturday" hidden>
-            <label for="lichess.gamesPerDay.Saturday">Games per Saturday:</label>
-            <input type="number" id="lichess.gamesPerDay.Saturday" min="1" />
+          <label for="lichess.gamesPerDay.Saturday">Games per Saturday:</label>
+          <input type="number" id="lichess.gamesPerDay.Saturday" min="1" />
         </li>
         <li id="li.lichess.gamesPerDay.Sunday" hidden>
-            <label for="lichess.gamesPerDay.Sunday">Games per Sunday:</label>
-            <input type="number" id="lichess.gamesPerDay.Sunday" min="1" />
+          <label for="lichess.gamesPerDay.Sunday">Games per Sunday:</label>
+          <input type="number" id="lichess.gamesPerDay.Sunday" min="1" />
         </li>
-    </ul>
-    <div style="padding-top: 20px;">
-        <button id="save" style="font-size: 18px;">Save</button>
+      </ul>
+      <div style="padding-top: 20px">
+        <button id="save" style="font-size: 18px">Save</button>
+      </div>
+      <div id="status"></div>
     </div>
-    <div id="status"></div>
-</div>
 
-<img src="../images/ChessBlocker256.png" style="padding-top: 50px;"/>
+    <img src="../images/ChessBlocker256.png" style="padding-top: 50px" />
 
-<script src="/scripts/options.js"></script>
-
-</body>
-
+    <script src="/scripts/options.js"></script>
+  </body>
 </html>

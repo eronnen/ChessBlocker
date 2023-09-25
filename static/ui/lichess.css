@@ -1,16 +1,16 @@
 :root {
-    --LichessBackground: rgb(235, 245, 235);
+  --LichessBackground: rgb(235, 245, 235);
 }
 
 h1 {
-    font-size: 48px;
-    background-color: var(--LichessBackground);
+  font-size: 48px;
+  background-color: var(--LichessBackground);
 }
 
 h2 {
-    font-size: 28px;
+  font-size: 28px;
 }
 
 h3 {
-    font-size: 22px;
+  font-size: 22px;
 }

@@ -1,35 +1,45 @@
-<!DOCTYPE html>
-<html >
-<head>
+<!doctype html>
+<html>
+  <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link rel="stylesheet" href="chessblocker.css">
-    <link rel="stylesheet" href="chesscom.css">
-    <link rel="stylesheet" href="lichess.css">
-</head>
-<body style="width: 200px; height: 80px;">
-    <a id="settingsButton" style="cursor: pointer;">
-        <!-- <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Pixel perfect - Flaticon</a> -->
-        <img src="../images/settings16.png" title="ChessBlocker settings" style="position: fixed; top: 10%; right: 4%;">
-        <img src="../images/ChessBlocker16.png" title="ChessBlocker settings" style="position: fixed; bottom: 10%; right: 4%;">
-        <!-- <img src="./images/ChessBlocker32.png"> -->
+    <link rel="stylesheet" href="chessblocker.css" />
+    <link rel="stylesheet" href="chesscom.css" />
+    <link rel="stylesheet" href="lichess.css" />
+  </head>
+  <body style="width: 200px; height: 80px">
+    <a id="settingsButton" style="cursor: pointer">
+      <!-- <a href="https://www.flaticon.com/free-icons/settings" title="settings icons">Settings icons created by Pixel perfect - Flaticon</a> -->
+      <img
+        src="../images/settings16.png"
+        title="ChessBlocker settings"
+        style="position: fixed; top: 10%; right: 4%"
+      />
+      <img
+        src="../images/ChessBlocker16.png"
+        title="ChessBlocker settings"
+        style="position: fixed; bottom: 10%; right: 4%"
+      />
+      <!-- <img src="./images/ChessBlocker32.png"> -->
     </a>
-    <table style="width: 180px;">
-        <tr>
-            <td colspan="2" style="font-size: 1.3em; font-weight: bold;">Today Chess Stats</td>
-        </tr>
-        <tr style="background-color: var(--ChesscomBackground);">
-            <td>Chess.com:</td>
-            <td id="chesscom.games">No Username</td>
-        </tr>
-        <tr style="background-color: var(--LichessBackground);">
-            <td>Lichess:</td>
-            <td id="lichess.games">No Username</td>
-        </tr>   
+    <table style="width: 180px">
+      <tr>
+        <td colspan="2" style="font-size: 1.3em; font-weight: bold">
+          Today Chess Stats
+        </td>
+      </tr>
+      <tr style="background-color: var(--ChesscomBackground)">
+        <td>Chess.com:</td>
+        <td id="chesscom.games">No Username</td>
+      </tr>
+      <tr style="background-color: var(--LichessBackground)">
+        <td>Lichess:</td>
+        <td id="lichess.games">No Username</td>
+      </tr>
     </table>
 
     <script src="/scripts/popup.js"></script>
-</body>
+  </body>
 </html>
