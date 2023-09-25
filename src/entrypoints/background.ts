@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 chrome.runtime.onMessage.addListener((message, sender, senderResponse) => {
     if (message.type == 'limit') {
         chrome.tabs.create({
-            url: `/pages/${message.website}_daily_limit_page.html`
+            url: `/static/ui/${message.website}_daily_limit_page.html`
         });
     }
     else if (message.type == 'allow-new-game-link') {
