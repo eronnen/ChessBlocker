@@ -180,7 +180,7 @@ async function initializeChessBlocker() {
     }
     poolMenuObserver.observe(lobbyElement, { childList: true, subtree: false });
 
-    // observe the "Create A Game dialog"
+    // observe the opening og the "Game setup" dialog
     const createGameObserver = new MutationObserver((mutationList) => {
       for (const mutation of mutationList) {
         for (const addedNode of mutation.addedNodes) {
@@ -188,53 +188,32 @@ async function initializeChessBlocker() {
             continue;
           }
 
-          if (addedNode.tagName == "DIALOG") {
-            // opened a "Create A Game dialog"
-
-            const submitTray = addedNode.querySelector(
-              "div.color-submits",
-            ) as HTMLElement;
-            const timeControlSelect = addedNode.querySelector(
-              "#sf_timeMode",
-            ) as HTMLSelectElement;
-            if (!submitTray || !timeControlSelect) {
-              console.error(
-                "ChessBlocker: Didnt find submit tray or time control",
-              );
-              continue;
-            }
-
-            submitTray.addEventListener(
-              "click",
-              (event: ChessBlockerEvent) => {
-                if (!(event.target instanceof Element)) {
-                  return;
-                }
-
-                const colorButton = event.target.closest(
-                  "button.color-submits__button",
-                );
-                if (!colorButton) {
-                  return; // not press on button
-                }
-
-                if (timeControlSelect.value != "realTime") {
-                  console.debug(
-                    "ChessBlocker: allowing to play non realTime game",
-                  );
-                  return;
-                }
-
-                playButtonHandler(
-                  event,
-                  LICHESS,
-                  false,
-                  getLichessPlayerLastDayGamesTimes,
-                );
-              },
-              true,
-            );
+          const createLobbyGameButton = addedNode.querySelector(
+            "button.lobby__start__button",
+          ) as HTMLElement;
+          
+          if (!createLobbyGameButton) {
+            continue;
           }
+          // opened a "Game setup" dialog
+
+          createLobbyGameButton.addEventListener(
+            "click",
+            (event: ChessBlockerEvent) => {
+              if (!(event.target instanceof Element)) {
+                return;
+              }
+
+              playButtonHandler(
+                event,
+                LICHESS,
+                false,
+                getLichessPlayerLastDayGamesTimes,
+              );
+            },
+            true,
+          );
+          console.debug("ChessBlocker: added listener to create lobby game button in dialog");
         }
       }
     });
@@ -243,6 +222,7 @@ async function initializeChessBlocker() {
       undefined,
       "div.lobby__table",
     );
+    console.debug("ChessBlocker: start observing lobby table for create game dialog");
     createGameObserver.observe(lobbyTableElement, {
       childList: true,
       subtree: false,
