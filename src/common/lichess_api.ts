@@ -71,7 +71,7 @@ export function getLichessGames(
 export async function isLichessUsernameValid(
   username: string,
 ): Promise<boolean> {
-  return fetch(`https://api.chess.com/pub/player/${username}`, {
+  return fetch(`https://lichess.org/api/user/${username}`, {
     method: "GET",
     headers: { Accept: "application/json" },
   })
